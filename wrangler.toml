@@ -1,6 +1,0 @@
-name = "bloxbox"
-compatibility_date = "2025-11-11"
-
-[assets]
-directory = "."
-
