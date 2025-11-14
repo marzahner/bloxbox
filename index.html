@@ -3,131 +3,316 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>bloxbox</title>
+    <title>bloxbox - Web Components Library</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --bg-primary: #0a0a0a;
+        --bg-secondary: #1a1a1a;
+        --bg-tertiary: #2a2a2a;
+        --text-primary: #ffffff;
+        --text-secondary: #a0a0a0;
+        --accent: #050ff5;
+        --accent-hover: #0408c7;
+        --border: #333;
+        --code-bg: #1e1e1e;
+      }
+
       body {
-        font-family: Inter, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      /* Hero Section */
+      #hero {
+        height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 100vh;
-        margin: 0;
-        background: var(--bg);
-        color: var(--c);
-        user-select: none;
-      }
-      main {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-      }
-      h1 {
-        font-weight: 400;
-        letter-spacing: -0.02em;
-        padding-left: 32px;
         position: relative;
-        animation: float 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        will-change: transform;
-        backface-visibility: hidden;
+        overflow: hidden;
       }
-      h1::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translate3d(0, -50%, 0);
-        width: 28px;
-        height: 28px;
-        background: var(--b);
-        animation: impatient 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
-        will-change: transform, opacity;
-        backface-visibility: hidden;
-      }
-      @keyframes impatient {
-        0% {
-          transform: translate3d(0, -50%, 0) scale3d(1, 1, 1)
-            rotate3d(0, 0, 1, 0deg);
-          opacity: 1;
-        }
-        15% {
-          transform: translate3d(-1px, -52%, 0) scale3d(1.15, 0.95, 1)
-            rotate3d(0, 0, 1, -2deg);
-          opacity: 0.9;
-        }
-        30% {
-          transform: translate3d(1px, -48%, 0) scale3d(0.95, 1.15, 1)
-            rotate3d(0, 0, 1, 2deg);
-          opacity: 0.85;
-        }
-        45% {
-          transform: translate3d(0, -50%, 0) scale3d(1.2, 1.2, 1)
-            rotate3d(0, 0, 1, 0deg);
-          opacity: 0.75;
-        }
-        60% {
-          transform: translate3d(1px, -51%, 0) scale3d(1.05, 1.1, 1)
-            rotate3d(0, 0, 1, -1.5deg);
-          opacity: 0.9;
-        }
-        75% {
-          transform: translate3d(-1px, -49%, 0) scale3d(1.1, 1.05, 1)
-            rotate3d(0, 0, 1, 1.5deg);
-          opacity: 0.88;
-        }
-        100% {
-          transform: translate3d(0, -50%, 0) scale3d(1, 1, 1)
-            rotate3d(0, 0, 1, 0deg);
-          opacity: 1;
-        }
-      }
-      @keyframes float {
-        0%,
-        100% {
-          transform: translate3d(0, 0, 0);
-        }
-        50% {
-          transform: translate3d(0, -4px, 0);
-        }
-      }
+
       #canvas {
-        position: fixed;
+        position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         z-index: 1;
-        pointer-events: none;
       }
-      main {
+
+      .hero-content {
         position: relative;
         z-index: 2;
+        text-align: center;
+        user-select: none;
       }
-      body {
-        cursor: crosshair;
+
+      .hero-title {
+        font-size: 5rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+        position: relative;
+        display: inline-block;
+        animation: float 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      .hero-title::before {
+        content: "";
+        position: absolute;
+        left: -40px;
+        top: 50%;
+        transform: translate3d(0, -50%, 0);
+        width: 28px;
+        height: 28px;
+        background: var(--accent);
+        animation: impatient 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+      }
+
+      .hero-subtitle {
+        font-size: 1.5rem;
+        color: var(--text-secondary);
+        font-weight: 300;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translate3d(0, 0, 0); }
+        50% { transform: translate3d(0, -8px, 0); }
+      }
+
+      @keyframes impatient {
+        0% { transform: translate3d(0, -50%, 0) scale3d(1, 1, 1) rotate3d(0, 0, 1, 0deg); opacity: 1; }
+        15% { transform: translate3d(-1px, -52%, 0) scale3d(1.15, 0.95, 1) rotate3d(0, 0, 1, -2deg); opacity: 0.9; }
+        30% { transform: translate3d(1px, -48%, 0) scale3d(0.95, 1.15, 1) rotate3d(0, 0, 1, 2deg); opacity: 0.85; }
+        45% { transform: translate3d(0, -50%, 0) scale3d(1.2, 1.2, 1) rotate3d(0, 0, 1, 0deg); opacity: 0.75; }
+        60% { transform: translate3d(1px, -51%, 0) scale3d(1.05, 1.1, 1) rotate3d(0, 0, 1, -1.5deg); opacity: 0.9; }
+        75% { transform: translate3d(-1px, -49%, 0) scale3d(1.1, 1.05, 1) rotate3d(0, 0, 1, 1.5deg); opacity: 0.88; }
+        100% { transform: translate3d(0, -50%, 0) scale3d(1, 1, 1) rotate3d(0, 0, 1, 0deg); opacity: 1; }
+      }
+
+      /* Documentation Sections */
+      #documentation {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+      }
+
+      .component-section {
+        margin-bottom: 6rem;
+        padding: 3rem;
+        background: var(--bg-secondary);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+      }
+
+      .component-section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+
+      .component-section h3 {
+        font-size: 1.5rem;
+        margin: 2rem 0 1rem;
+        color: var(--text-primary);
+        font-weight: 500;
+      }
+
+      .component-section p {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+      }
+
+      .component-section strong {
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .component-section ul {
+        list-style: none;
+        margin-bottom: 2rem;
+      }
+
+      .component-section li {
+        padding: 0.5rem 0;
+        padding-left: 1.5rem;
+        position: relative;
+        color: var(--text-secondary);
+      }
+
+      .component-section li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--accent);
+      }
+
+      .component-section li strong {
+        color: var(--text-primary);
+      }
+
+      /* Code Blocks */
+      .code-block-container {
+        margin: 2rem 0;
+      }
+
+      .code-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .code-tab {
+        padding: 0.75rem 1.5rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border);
+        color: var(--text-secondary);
+        cursor: pointer;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+      }
+
+      .code-tab:hover {
+        background: var(--bg-secondary);
+        border-color: var(--accent);
+      }
+
+      .code-tab.active {
+        background: var(--accent);
+        color: var(--text-primary);
+        border-color: var(--accent);
+      }
+
+      .code-display {
+        position: relative;
+        background: var(--code-bg);
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+      }
+
+      .code-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background: var(--bg-tertiary);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .code-language {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .copy-btn {
+        padding: 0.5rem 1rem;
+        background: var(--accent);
+        color: var(--text-primary);
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: all 0.2s;
+      }
+
+      .copy-btn:hover {
+        background: var(--accent-hover);
+      }
+
+      .copy-btn.copied {
+        background: #10b981;
+      }
+
+      .code-content {
+        padding: 1.5rem;
+        overflow-x: auto;
+      }
+
+      .code-content pre {
+        margin: 0;
+        background: transparent !important;
+        padding: 0 !important;
+      }
+
+      .code-content code {
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        background: transparent !important;
+      }
+
+      /* Scrollbar */
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 5px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--accent);
+      }
+
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 3rem;
+        }
+
+        .hero-subtitle {
+          font-size: 1.2rem;
+        }
+
+        .component-section {
+          padding: 2rem 1.5rem;
+        }
+
+        #documentation {
+          padding: 2rem 1rem;
+        }
       }
     </style>
   </head>
   <body>
-    <canvas id="canvas"></canvas>
-    <main><h1>bloxbox</h1></main>
-    <script>
-      const schemes = [
-        { bg: "#fff", c: "#000", b: "#050ff5" },
-        { bg: "#000", c: "#fff", b: "#050ff5" },
-        { bg: "#050ff5", c: "#fff", b: "#000" },
-      ];
-      const d = document.documentElement.style;
-      const lastTheme = localStorage.getItem("lastTheme");
-      const availableSchemes = lastTheme
-        ? schemes.filter((s) => `${s.bg}-${s.c}-${s.b}` !== lastTheme)
-        : schemes;
-      const scheme =
-        availableSchemes[~~(Math.random() * availableSchemes.length)];
-      d.setProperty("--bg", scheme.bg);
-      d.setProperty("--c", scheme.c);
-      d.setProperty("--b", scheme.b);
-      localStorage.setItem("lastTheme", `${scheme.bg}-${scheme.c}-${scheme.b}`);
+    <!-- Hero Section -->
+    <section id="hero">
+      <canvas id="canvas"></canvas>
+      <div class="hero-content">
+        <h1 class="hero-title">bloxbox</h1>
+        <p class="hero-subtitle">Web Components Library</p>
+      </div>
+    </section>
 
+    <!-- Documentation Sections -->
+    <div id="documentation"></div>
+
+    <script>
+      // Canvas drawing functionality (from original)
       const canvas = document.getElementById("canvas");
       const ctx = canvas.getContext("2d");
       let isDrawing = false;
@@ -140,12 +325,6 @@
       }
       resizeCanvas();
       window.addEventListener("resize", resizeCanvas);
-
-      function getSquareColor() {
-        return getComputedStyle(document.documentElement)
-          .getPropertyValue("--c")
-          .trim();
-      }
 
       function startDrawing(e) {
         isDrawing = true;
@@ -161,7 +340,7 @@
         const currentX = (e.clientX || e.touches[0].clientX) - rect.left;
         const currentY = (e.clientY || e.touches[0].clientY) - rect.top;
 
-        ctx.strokeStyle = getSquareColor();
+        ctx.strokeStyle = "#ffffff";
         ctx.lineWidth = 3;
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
@@ -183,12 +362,326 @@
       canvas.addEventListener("mousemove", draw);
       canvas.addEventListener("mouseup", stopDrawing);
       canvas.addEventListener("mouseout", stopDrawing);
-
       canvas.addEventListener("touchstart", startDrawing);
       canvas.addEventListener("touchmove", draw);
       canvas.addEventListener("touchend", stopDrawing);
 
-      canvas.style.pointerEvents = "auto";
+      // Markdown Parser and Documentation Generator
+      class DocumentationGenerator {
+        constructor() {
+          this.componentsFolder = 'web-components/';
+        }
+
+        async loadMarkdownFiles() {
+          try {
+            const response = await fetch(this.componentsFolder);
+            const text = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(text, 'text/html');
+            const links = Array.from(doc.querySelectorAll('a'))
+              .map(a => a.href)
+              .filter(href => href.endsWith('.md'));
+
+            // Fallback: try to load known files
+            if (links.length === 0) {
+              const knownFiles = ['icon-svg.md'];
+              return knownFiles;
+            }
+
+            return links.map(link => link.split('/').pop());
+          } catch (error) {
+            // Fallback to known files
+            return ['icon-svg.md'];
+          }
+        }
+
+        async fetchMarkdownFile(filename) {
+          const response = await fetch(`${this.componentsFolder}${filename}`);
+          return await response.text();
+        }
+
+        parseMarkdown(markdown) {
+          const lines = markdown.split('\n');
+          let html = '';
+          let i = 0;
+
+          while (i < lines.length) {
+            const line = lines[i];
+
+            // Handle H2 (##)
+            if (line.startsWith('## ')) {
+              const content = line.substring(3);
+              const encoded = this.encodeHTMLTags(content);
+              html += `<h2>${encoded}</h2>\n`;
+              i++;
+              continue;
+            }
+
+            // Handle H3 (###)
+            if (line.startsWith('### ')) {
+              const content = line.substring(4);
+              html += `<h3>${content}</h3>\n`;
+              i++;
+              continue;
+            }
+
+            // Handle list items (-)
+            if (line.trim().startsWith('- ')) {
+              const content = line.trim().substring(2);
+              const processed = this.processInlineFormatting(content);
+              html += `<li>${processed}</li>\n`;
+              i++;
+              continue;
+            }
+
+            // Handle code blocks
+            if (line.trim().startsWith('``` html')) {
+              const { html: codeBlockHtml, nextIndex } = this.parseHTMLCodeBlocks(lines, i);
+              html += codeBlockHtml;
+              i = nextIndex;
+              continue;
+            }
+
+            if (line.trim().startsWith('``` js')) {
+              const { html: codeBlockHtml, nextIndex } = this.parseJSCodeBlock(lines, i);
+              html += codeBlockHtml;
+              i = nextIndex;
+              continue;
+            }
+
+            // Handle paragraphs
+            if (line.trim() !== '' && !line.startsWith('#') && !line.startsWith('-')) {
+              const processed = this.processInlineFormatting(line.trim());
+              html += `<p>${processed}</p>\n`;
+            }
+
+            i++;
+          }
+
+          return html;
+        }
+
+        encodeHTMLTags(text) {
+          return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        processInlineFormatting(text) {
+          // Convert `text` to <strong>text</strong>
+          return text.replace(/`([^`]+)`/g, '<strong>$1</strong>');
+        }
+
+        parseHTMLCodeBlocks(lines, startIndex) {
+          const codeBlocks = [];
+          let i = startIndex;
+
+          while (i < lines.length) {
+            if (lines[i].trim().startsWith('``` html')) {
+              i++; // Skip the ``` html line
+
+              // Get the comment line (title)
+              const commentLine = lines[i].trim();
+              const titleMatch = commentLine.match(/<!--\s*(.+?)\s*-->/);
+              const title = titleMatch ? titleMatch[1] : 'Example';
+
+              i++; // Skip the comment line
+
+              // Collect code until closing ```
+              let code = '';
+              while (i < lines.length && !lines[i].trim().startsWith('```')) {
+                code += lines[i] + '\n';
+                i++;
+              }
+
+              codeBlocks.push({ title, code: code.trim() });
+              i++; // Skip closing ```
+            } else if (lines[i].trim().startsWith('```')) {
+              break; // Hit a different code block type
+            } else if (lines[i].trim() === '' || lines[i].startsWith('## ') || lines[i].startsWith('### ') || lines[i].startsWith('- ')) {
+              break; // Hit other content
+            } else {
+              i++;
+            }
+          }
+
+          if (codeBlocks.length === 0) {
+            return { html: '', nextIndex: startIndex + 1 };
+          }
+
+          const id = `html-code-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+          let html = '<div class="code-block-container">\n';
+          html += '<div class="code-tabs">\n';
+
+          codeBlocks.forEach((block, index) => {
+            const activeClass = index === 0 ? ' active' : '';
+            html += `<button class="code-tab${activeClass}" data-target="${id}" data-index="${index}">${block.title}</button>\n`;
+          });
+
+          html += '</div>\n';
+          html += '<div class="code-display">\n';
+          html += '<div class="code-header">\n';
+          html += '<span class="code-language">HTML</span>\n';
+          html += `<button class="copy-btn" data-copy-type="html" data-target="${id}">Copy Code</button>\n`;
+          html += '</div>\n';
+          html += `<div class="code-content" id="${id}">\n`;
+
+          codeBlocks.forEach((block, index) => {
+            const displayStyle = index === 0 ? '' : ' style="display:none;"';
+            const escapedCode = this.escapeHTML(block.code);
+            html += `<pre data-code-index="${index}"${displayStyle}><code class="language-html">${escapedCode}</code></pre>\n`;
+          });
+
+          html += '</div>\n';
+          html += '</div>\n';
+          html += '</div>\n';
+
+          // Store the code blocks for copy functionality
+          if (!window.codeBlocks) window.codeBlocks = {};
+          window.codeBlocks[id] = codeBlocks;
+
+          return { html, nextIndex: i };
+        }
+
+        parseJSCodeBlock(lines, startIndex) {
+          let i = startIndex + 1; // Skip ``` js line
+          let fullCode = '';
+
+          // Collect all code until closing ```
+          while (i < lines.length && !lines[i].trim().startsWith('```')) {
+            fullCode += lines[i] + '\n';
+            i++;
+          }
+
+          const id = `js-code-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+          // Remove comments for display
+          const displayCode = this.removeJSComments(fullCode);
+          const escapedDisplayCode = this.escapeHTML(displayCode.trim());
+
+          let html = '<div class="code-block-container">\n';
+          html += '<div class="code-display">\n';
+          html += '<div class="code-header">\n';
+          html += '<span class="code-language">JavaScript</span>\n';
+          html += `<button class="copy-btn" data-copy-type="js" data-target="${id}">Copy Code</button>\n`;
+          html += '</div>\n';
+          html += `<div class="code-content" id="${id}">\n`;
+          html += `<pre><code class="language-javascript">${escapedDisplayCode}</code></pre>\n`;
+          html += '</div>\n';
+          html += '</div>\n';
+          html += '</div>\n';
+
+          // Store both versions
+          if (!window.codeBlocks) window.codeBlocks = {};
+          window.codeBlocks[id] = {
+            display: displayCode.trim(),
+            copy: fullCode.trim()
+          };
+
+          return { html, nextIndex: i + 1 };
+        }
+
+        removeJSComments(code) {
+          // Remove block comments (/* ... */)
+          let result = code.replace(/\/\*[\s\S]*?\*\//g, '');
+
+          // Remove single-line comments (//)
+          result = result.replace(/\/\/.*$/gm, '');
+
+          // Clean up excessive blank lines
+          result = result.replace(/\n\s*\n\s*\n/g, '\n\n');
+
+          return result;
+        }
+
+        escapeHTML(text) {
+          const div = document.createElement('div');
+          div.textContent = text;
+          return div.innerHTML;
+        }
+
+        async generate() {
+          const files = await this.loadMarkdownFiles();
+          const documentation = document.getElementById('documentation');
+
+          for (const file of files) {
+            const markdown = await this.fetchMarkdownFile(file);
+            const html = this.parseMarkdown(markdown);
+
+            const section = document.createElement('div');
+            section.className = 'component-section';
+            section.innerHTML = html;
+
+            documentation.appendChild(section);
+          }
+
+          // Initialize syntax highlighting
+          document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightElement(block);
+          });
+
+          // Initialize event listeners
+          this.initializeEventListeners();
+        }
+
+        initializeEventListeners() {
+          // Code tab switching
+          document.querySelectorAll('.code-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+              const target = e.target.dataset.target;
+              const index = parseInt(e.target.dataset.index);
+
+              // Update active tab
+              document.querySelectorAll(`.code-tab[data-target="${target}"]`).forEach(t => {
+                t.classList.remove('active');
+              });
+              e.target.classList.add('active');
+
+              // Show corresponding code
+              const container = document.getElementById(target);
+              container.querySelectorAll('pre').forEach((pre, i) => {
+                pre.style.display = i === index ? '' : 'none';
+              });
+            });
+          });
+
+          // Copy buttons
+          document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+              const target = e.target.dataset.target;
+              const copyType = e.target.dataset.copyType;
+
+              let textToCopy = '';
+
+              if (copyType === 'html') {
+                const codeBlocks = window.codeBlocks[target];
+                const activeTab = document.querySelector(`.code-tab.active[data-target="${target}"]`);
+                const activeIndex = parseInt(activeTab.dataset.index);
+                textToCopy = codeBlocks[activeIndex].code;
+              } else if (copyType === 'js') {
+                const codeData = window.codeBlocks[target];
+                textToCopy = codeData.copy;
+              }
+
+              try {
+                await navigator.clipboard.writeText(textToCopy);
+                e.target.textContent = 'Copied!';
+                e.target.classList.add('copied');
+
+                setTimeout(() => {
+                  e.target.textContent = 'Copy Code';
+                  e.target.classList.remove('copied');
+                }, 2000);
+              } catch (err) {
+                console.error('Failed to copy:', err);
+              }
+            });
+          });
+        }
+      }
+
+      // Initialize documentation generator
+      const generator = new DocumentationGenerator();
+      generator.generate();
     </script>
   </body>
 </html>
