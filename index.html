@@ -309,7 +309,13 @@
     </section>
 
     <!-- Documentation Sections -->
-    <div id="documentation"></div>
+    <div id="documentation">
+      <!-- This content will be replaced by generated documentation -->
+      <div class="component-section" style="min-height: 50vh;">
+        <h2>Loading documentation...</h2>
+        <p>If you can see this message for more than a few seconds, check the browser console for errors.</p>
+      </div>
+    </div>
 
     <script>
       // Canvas drawing functionality (from original)
@@ -366,6 +372,17 @@
       canvas.addEventListener("touchmove", draw);
       canvas.addEventListener("touchend", stopDrawing);
 
+      // ========================================
+      // CONFIGURATION: Add your .md files here
+      // ========================================
+      const COMPONENT_FILES = [
+        'icon-svg.md',
+        // Add more .md files here as you create them:
+        // 'button.md',
+        // 'card.md',
+        // etc...
+      ];
+
       // Markdown Parser and Documentation Generator
       class DocumentationGenerator {
         constructor() {
@@ -373,26 +390,7 @@
         }
 
         async loadMarkdownFiles() {
-          try {
-            const response = await fetch(this.componentsFolder);
-            const text = await response.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(text, 'text/html');
-            const links = Array.from(doc.querySelectorAll('a'))
-              .map(a => a.href)
-              .filter(href => href.endsWith('.md'));
-
-            // Fallback: try to load known files
-            if (links.length === 0) {
-              const knownFiles = ['icon-svg.md'];
-              return knownFiles;
-            }
-
-            return links.map(link => link.split('/').pop());
-          } catch (error) {
-            // Fallback to known files
-            return ['icon-svg.md'];
-          }
+          return COMPONENT_FILES;
         }
 
         async fetchMarkdownFile(filename) {
@@ -600,27 +598,49 @@
         }
 
         async generate() {
-          const files = await this.loadMarkdownFiles();
-          const documentation = document.getElementById('documentation');
+          try {
+            console.log('Starting documentation generation...');
+            const files = await this.loadMarkdownFiles();
+            console.log('Files to load:', files);
 
-          for (const file of files) {
-            const markdown = await this.fetchMarkdownFile(file);
-            const html = this.parseMarkdown(markdown);
+            const documentation = document.getElementById('documentation');
 
-            const section = document.createElement('div');
-            section.className = 'component-section';
-            section.innerHTML = html;
+            for (const file of files) {
+              console.log(`Loading ${file}...`);
+              const markdown = await this.fetchMarkdownFile(file);
+              console.log(`Parsing ${file}...`);
+              const html = this.parseMarkdown(markdown);
 
-            documentation.appendChild(section);
+              const section = document.createElement('div');
+              section.className = 'component-section';
+              section.innerHTML = html;
+
+              documentation.appendChild(section);
+              console.log(`Added section for ${file}`);
+            }
+
+            // Initialize syntax highlighting
+            console.log('Initializing syntax highlighting...');
+            document.querySelectorAll('pre code').forEach((block) => {
+              hljs.highlightElement(block);
+            });
+
+            // Initialize event listeners
+            console.log('Initializing event listeners...');
+            this.initializeEventListeners();
+
+            console.log('Documentation generation complete!');
+          } catch (error) {
+            console.error('Error generating documentation:', error);
+            const documentation = document.getElementById('documentation');
+            documentation.innerHTML = `
+              <div class="component-section">
+                <h2>Error Loading Documentation</h2>
+                <p>There was an error loading the documentation: ${error.message}</p>
+                <p>Please check the browser console for more details.</p>
+              </div>
+            `;
           }
-
-          // Initialize syntax highlighting
-          document.querySelectorAll('pre code').forEach((block) => {
-            hljs.highlightElement(block);
-          });
-
-          // Initialize event listeners
-          this.initializeEventListeners();
         }
 
         initializeEventListeners() {
@@ -679,9 +699,22 @@
         }
       }
 
-      // Initialize documentation generator
-      const generator = new DocumentationGenerator();
-      generator.generate();
+      // Initialize documentation generator when page is fully loaded
+      window.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM Content Loaded');
+        const generator = new DocumentationGenerator();
+        generator.generate();
+      });
+
+      // Fallback: also try on window load in case DOMContentLoaded already fired
+      if (document.readyState === 'loading') {
+        // Document still loading, DOMContentLoaded will fire
+      } else {
+        // Document already loaded
+        console.log('Document already loaded, generating immediately');
+        const generator = new DocumentationGenerator();
+        generator.generate();
+      }
     </script>
   </body>
 </html>
