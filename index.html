@@ -1398,67 +1398,37 @@
         }
 
         async loadMarkdownFiles() {
-          try {
-            const files = [];
-            const categories = ["Blueprints", "Visuals"];
+          // File manifest - add new markdown files here
+          // This works on any static host without requiring directory listings
+          const fileManifest = [
+            {
+              path: "Blueprints/h-stack.md",
+              category: "Blueprints",
+              filename: "h-stack.md",
+            },
+            {
+              path: "Blueprints/h-stack-responsive.md",
+              category: "Blueprints",
+              filename: "h-stack-responsive.md",
+            },
+            {
+              path: "Blueprints/v-stack.md",
+              category: "Blueprints",
+              filename: "v-stack.md",
+            },
+            {
+              path: "Blueprints/v-stack-responsive.md",
+              category: "Blueprints",
+              filename: "v-stack-responsive.md",
+            },
+            {
+              path: "Visuals/icon-svg.md",
+              category: "Visuals",
+              filename: "icon-svg.md",
+            },
+          ];
 
-            for (const category of categories) {
-              try {
-                const response = await fetch(
-                  `${this.componentsFolder}${category}/`
-                );
-                const text = await response.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(text, "text/html");
-                const links = Array.from(doc.querySelectorAll("a"))
-                  .map((a) => a.href)
-                  .filter((href) => href.endsWith(".md"));
-
-                links.forEach((link) => {
-                  const filename = link.split("/").pop();
-                  files.push({
-                    path: `${category}/${filename}`,
-                    category,
-                    filename,
-                  });
-                });
-              } catch (error) {
-                console.warn(`Failed to load category ${category}:`, error);
-              }
-            }
-
-            // Fallback: try known files if directory listing fails
-            if (files.length === 0) {
-              return [
-                {
-                  path: "Blueprints/h-stack.md",
-                  category: "Blueprints",
-                  filename: "h-stack.md",
-                },
-                {
-                  path: "Visuals/icon-svg.md",
-                  category: "Visuals",
-                  filename: "icon-svg.md",
-                },
-              ];
-            }
-
-            return files;
-          } catch (error) {
-            // Fallback to known files
-            return [
-              {
-                path: "Blueprints/h-stack.md",
-                category: "Blueprints",
-                filename: "h-stack.md",
-              },
-              {
-                path: "Visuals/icon-svg.md",
-                category: "Visuals",
-                filename: "icon-svg.md",
-              },
-            ];
-          }
+          return fileManifest;
         }
 
         async fetchMarkdownFile(filePath) {
