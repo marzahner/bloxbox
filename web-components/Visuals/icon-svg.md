@@ -6,44 +6,46 @@
 
 - `name` (required): Name of the SVG file in assets/icons (without .svg extension)
 - `size` (optional): Size in pixels (default size: 18)
-- `color` (optional) Explicit color value (default color: inherits from CSS classes): 
+- `color` (optional) Explicit color value (default color: inherits from CSS classes):
 
 The component automatically:
+
 - Loads SVG files from assets/icons/{name}.svg
 - Handles stroke-based icons (preserves fill="none")
 - Handles fill-based icons
 - Inherits color from CSS classes when no explicit color is set
-``` html
+
+```html
 <!-- Basic Icon -->
 <icon-svg name="font" class="text-white"></icon-svg>
 ```
 
-``` html
+```html
 <!-- Custom Size -->
-<icon-svg name="preview" size="32" class="text-white"></icon-svg>
+<icon-svg name="font" size="32" class="text-white"></icon-svg>
 ```
 
-``` html
+```html
 <!-- Explicit Color -->
-<icon-svg name="font" color="#ff0000" size="20"></icon-svg>
+<icon-svg name="font" color="#020DE4" size="20"></icon-svg>
 ```
 
-``` html
+```html
 <!-- Inherit Color -->
 <span class="text-white">
-    <icon-svg name="preview" size="16"></icon-svg> View
+  <icon-svg name="font" size="16"></icon-svg> View
 </span>
 ```
 
-``` html
-<!-- In <h-stack> -->
+```html
+<!-- In &lt;h-stack&gt; -->
 <h-stack role="group">
-  <icon-svg name="chevron_bottom"></icon-svg>
+  <icon-svg name="font"></icon-svg>
   <h3>Character</h3>
 </h-stack>
 ```
 
-``` js
+```js
 /**
  * <icon-svg> Web Component
  *
@@ -53,7 +55,7 @@ The component automatically:
  * <icon-svg name="font" class="text-white"></icon-svg>
  *
  * <!-- Custom size -->
- * <icon-svg name="preview" size="32" class="text-white"></icon-svg>
+ * <icon-svg name="font" size="32" class="text-white"></icon-svg>
  *
  * <!-- Explicit color -->
  * <icon-svg name="font" color="#ff0000" size="20"></icon-svg>
@@ -93,8 +95,11 @@ class IconSvg extends HTMLElement {
     this.render();
   }
 
-  attributeChangedCallback() {
-    this.render();
+  attributeChangedCallback(name, oldValue, newValue) {
+    // Only re-render if the value actually changed
+    if (oldValue !== newValue) {
+      this.render();
+    }
   }
 
   async render() {
@@ -160,7 +165,9 @@ class IconSvg extends HTMLElement {
             el.setAttribute("fill", color);
           }
         } else if (isStrokeBased) {
-          // Root SVG is stroke-based but element doesn't have stroke - inherit from root
+          // Root SVG is stroke-based - apply stroke color to elements that inherit it
+          el.setAttribute("stroke", color);
+          // Preserve fill="none" for stroke-only icons
           if (existingFill === null || existingFill === "none") {
             el.setAttribute("fill", "none");
           }
@@ -174,20 +181,25 @@ class IconSvg extends HTMLElement {
         }
       });
 
+      // Also update root SVG stroke if it exists
+      if (rootStroke && rootStroke !== "none") {
+        svgElement.setAttribute("stroke", color);
+      }
+
       // Style wrapper
       const style = document.createElement("style");
       style.textContent = `
-        :host {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-        }
-        svg {
-          display: block;
-          width: ${size}px;
-          height: ${size}px;
-        }
-      `;
+          :host {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+          }
+          svg {
+            display: block;
+            width: ${size}px;
+            height: ${size}px;
+          }
+        `;
 
       this.shadowRoot.innerHTML = "";
       this.shadowRoot.appendChild(style);
@@ -200,5 +212,4 @@ class IconSvg extends HTMLElement {
 }
 
 customElements.define("icon-svg", IconSvg);
-
 ```

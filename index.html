@@ -4,8 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>bloxbox - Web Components Library</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- Import components early to ensure they're registered -->
+    <script type="module" src="./index.js"></script>
     <style>
       * {
         margin: 0;
@@ -26,7 +31,8 @@
       }
 
       body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+          "Oxygen", "Ubuntu", "Cantarell", sans-serif;
         background: var(--bg-primary);
         color: var(--text-primary);
         line-height: 1.6;
@@ -72,11 +78,11 @@
       .hero-title::before {
         content: "";
         position: absolute;
-        left: -40px;
-        top: 50%;
+        left: -60px;
+        top: 54%;
         transform: translate3d(0, -50%, 0);
-        width: 28px;
-        height: 28px;
+        width: 44px;
+        height: 44px;
         background: var(--accent);
         animation: impatient 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
       }
@@ -88,18 +94,228 @@
       }
 
       @keyframes float {
-        0%, 100% { transform: translate3d(0, 0, 0); }
-        50% { transform: translate3d(0, -8px, 0); }
+        0%,
+        100% {
+          transform: translate3d(0, 0, 0);
+        }
+        50% {
+          transform: translate3d(0, -8px, 0);
+        }
       }
 
       @keyframes impatient {
-        0% { transform: translate3d(0, -50%, 0) scale3d(1, 1, 1) rotate3d(0, 0, 1, 0deg); opacity: 1; }
-        15% { transform: translate3d(-1px, -52%, 0) scale3d(1.15, 0.95, 1) rotate3d(0, 0, 1, -2deg); opacity: 0.9; }
-        30% { transform: translate3d(1px, -48%, 0) scale3d(0.95, 1.15, 1) rotate3d(0, 0, 1, 2deg); opacity: 0.85; }
-        45% { transform: translate3d(0, -50%, 0) scale3d(1.2, 1.2, 1) rotate3d(0, 0, 1, 0deg); opacity: 0.75; }
-        60% { transform: translate3d(1px, -51%, 0) scale3d(1.05, 1.1, 1) rotate3d(0, 0, 1, -1.5deg); opacity: 0.9; }
-        75% { transform: translate3d(-1px, -49%, 0) scale3d(1.1, 1.05, 1) rotate3d(0, 0, 1, 1.5deg); opacity: 0.88; }
-        100% { transform: translate3d(0, -50%, 0) scale3d(1, 1, 1) rotate3d(0, 0, 1, 0deg); opacity: 1; }
+        0% {
+          transform: translate3d(0, -50%, 0) scale3d(1, 1, 1)
+            rotate3d(0, 0, 1, 0deg);
+          opacity: 1;
+        }
+        15% {
+          transform: translate3d(-1px, -52%, 0) scale3d(1.15, 0.95, 1)
+            rotate3d(0, 0, 1, -2deg);
+          opacity: 0.9;
+        }
+        30% {
+          transform: translate3d(1px, -48%, 0) scale3d(0.95, 1.15, 1)
+            rotate3d(0, 0, 1, 2deg);
+          opacity: 0.85;
+        }
+        45% {
+          transform: translate3d(0, -50%, 0) scale3d(1.2, 1.2, 1)
+            rotate3d(0, 0, 1, 0deg);
+          opacity: 0.75;
+        }
+        60% {
+          transform: translate3d(1px, -51%, 0) scale3d(1.05, 1.1, 1)
+            rotate3d(0, 0, 1, -1.5deg);
+          opacity: 0.9;
+        }
+        75% {
+          transform: translate3d(-1px, -49%, 0) scale3d(1.1, 1.05, 1)
+            rotate3d(0, 0, 1, 1.5deg);
+          opacity: 0.88;
+        }
+        100% {
+          transform: translate3d(0, -50%, 0) scale3d(1, 1, 1)
+            rotate3d(0, 0, 1, 0deg);
+          opacity: 1;
+        }
+      }
+
+      /* Top Bar (Mobile) */
+      #top-bar {
+        display: none;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border);
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+
+      #top-bar.collapsed {
+        max-height: 60px;
+      }
+
+      #top-bar.expanded {
+        max-height: 1000px;
+      }
+
+      #top-bar-header {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 1rem;
+        min-height: 60px;
+      }
+
+      #top-bar-toggle {
+        width: 40px;
+        height: 40px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+      }
+
+      #top-bar-toggle span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: var(--text-primary);
+        transition: all 0.3s ease;
+        border-radius: 1px;
+        transform-origin: center;
+      }
+
+      #top-bar.expanded #top-bar-toggle span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+
+      #top-bar.expanded #top-bar-toggle span:nth-child(2) {
+        opacity: 0;
+      }
+
+      #top-bar.expanded #top-bar-toggle span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
+
+      #top-bar-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0 1rem 1rem 1rem;
+        opacity: 0;
+        max-height: 0;
+        transition: opacity 0.3s ease, max-height 0.3s ease;
+      }
+
+      #top-bar.expanded #top-bar-nav {
+        opacity: 1;
+        max-height: 1000px;
+      }
+
+      #top-bar-nav a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        transition: all 0.2s;
+        font-size: 0.9rem;
+      }
+
+      #top-bar-nav a:hover {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+      }
+
+      /* Sidebar (Desktop) */
+      #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 250px;
+        height: 100vh;
+        background: var(--bg-secondary);
+        border-right: 1px solid var(--border);
+        padding: 2rem 1.5rem;
+        overflow-y: auto;
+        z-index: 999;
+      }
+
+      #sidebar h3 {
+        font-size: 1rem;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.85rem;
+      }
+
+      #sidebar nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .nav-category-header {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+      }
+
+      .nav-category-header:first-child {
+        margin-top: 0;
+      }
+
+      #top-bar-nav .nav-category-header {
+        margin-top: 1rem;
+      }
+
+      #top-bar-nav .nav-category-header:first-child {
+        margin-top: 0;
+      }
+
+      #sidebar nav a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        transition: all 0.2s;
+        font-size: 0.9rem;
+      }
+
+      #sidebar nav a:hover {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+      }
+
+      #sidebar::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      #sidebar::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+      }
+
+      #sidebar::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 4px;
+      }
+
+      #sidebar::-webkit-scrollbar-thumb:hover {
+        background: var(--accent);
       }
 
       /* Documentation Sections */
@@ -107,6 +323,8 @@
         max-width: 1200px;
         margin: 0 auto;
         padding: 4rem 2rem;
+        margin-left: 250px;
+        transition: margin-left 0.3s ease;
       }
 
       .component-section {
@@ -143,26 +361,142 @@
       }
 
       .component-section ul {
-        list-style: none;
         margin-bottom: 2rem;
+        padding-left: 1.5rem;
       }
 
       .component-section li {
         padding: 0.5rem 0;
-        padding-left: 1.5rem;
-        position: relative;
         color: var(--text-secondary);
-      }
-
-      .component-section li::before {
-        content: "→";
-        position: absolute;
-        left: 0;
-        color: var(--accent);
       }
 
       .component-section li strong {
         color: var(--text-primary);
+      }
+
+      /* Unified Example Sections */
+      .example-container {
+        margin: 2.5rem 0;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      .example-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border);
+        gap: 1rem;
+      }
+
+      .example-tabs {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        flex: 1;
+      }
+
+      .example-title {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+        flex: 1;
+      }
+
+      .example-tab {
+        padding: 0.5rem 1rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border);
+        color: var(--text-secondary);
+        cursor: pointer;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+
+      .example-tab:hover {
+        background: var(--bg-primary);
+        border-color: var(--accent);
+      }
+
+      .example-tab.active {
+        background: var(--accent);
+        color: var(--text-primary);
+        border-color: var(--accent);
+      }
+
+      .example-content-wrapper {
+        position: relative;
+        min-height: 200px;
+      }
+
+      .example-panel {
+        display: none;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+      }
+
+      .example-panel.active {
+        display: grid !important;
+      }
+
+      .example-preview {
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(255, 255, 255, 0.01) 10px,
+            rgba(255, 255, 255, 0.01) 20px
+          ),
+          var(--bg-primary);
+        padding: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+        border-right: 1px solid var(--border);
+      }
+
+      .example-preview .preview-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        width: 100%;
+      }
+
+      .example-preview .preview-content > * {
+        flex-shrink: 0;
+      }
+
+      .example-code {
+        background: var(--code-bg);
+        padding: 1.5rem;
+        overflow-x: auto;
+        display: flex;
+        align-items: center;
+      }
+
+      .example-code pre {
+        margin: 0;
+        background: transparent !important;
+        padding: 0 !important;
+        width: 100%;
+      }
+
+      .example-code code {
+        font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+        font-size: 0.875rem;
+        line-height: 1.6;
+        background: transparent !important;
+        color: #d4d4d4;
       }
 
       /* Code Blocks */
@@ -242,6 +576,22 @@
         background: #10b981;
       }
 
+      .expand-btn {
+        padding: 0.5rem 1rem;
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: all 0.2s;
+      }
+
+      .expand-btn:hover {
+        background: var(--bg-secondary);
+        border-color: var(--accent);
+      }
+
       .code-content {
         padding: 1.5rem;
         overflow-x: auto;
@@ -254,10 +604,275 @@
       }
 
       .code-content code {
-        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
         font-size: 0.9rem;
         line-height: 1.6;
         background: transparent !important;
+        color: #d4d4d4;
+      }
+
+      /* VS Code Dark+ Theme Colors */
+      .hljs {
+        background: #1e1e1e !important;
+        color: #d4d4d4 !important;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-literal,
+      .hljs-section,
+      .hljs-link {
+        color: #569cd6 !important;
+      }
+
+      .hljs-function .hljs-keyword {
+        color: #569cd6 !important;
+      }
+
+      .hljs-subst {
+        color: #d4d4d4 !important;
+      }
+
+      .hljs-string {
+        color: #ce9178 !important;
+      }
+
+      /* HTML-specific: title, name, attribute, type for HTML/XML */
+      .language-html .hljs-title,
+      code.language-html .hljs-title,
+      .language-html .hljs-name:not(.hljs-function),
+      code.language-html .hljs-name:not(.hljs-function),
+      .language-html .hljs-type,
+      code.language-html .hljs-type,
+      .language-html .hljs-attribute,
+      code.language-html .hljs-attribute {
+        color: #ce9178 !important;
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-addition,
+      .hljs-variable,
+      .hljs-template-tag,
+      .hljs-template-variable {
+        color: #ce9178 !important;
+      }
+
+      .hljs-comment,
+      .hljs-quote,
+      .hljs-deletion,
+      .hljs-meta {
+        color: #6a9955 !important;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-title,
+      .hljs-section,
+      .hljs-doctag,
+      .hljs-type,
+      .hljs-name,
+      .hljs-strong {
+        font-weight: normal;
+      }
+
+      .hljs-number {
+        color: #b5cea8 !important;
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      /* HTML/XML specific - only apply to HTML code blocks */
+      .language-html .hljs-tag .hljs-name,
+      code.language-html .hljs-tag .hljs-name {
+        color: #569cd6 !important;
+      }
+
+      .language-html .hljs-tag .hljs-attr,
+      code.language-html .hljs-tag .hljs-attr {
+        color: #92c5f7 !important;
+      }
+
+      .language-html .hljs-tag,
+      code.language-html .hljs-tag {
+        color: #808080 !important;
+      }
+
+      /* JavaScript specific - only apply to JavaScript code blocks */
+      .language-javascript .hljs-function,
+      code.language-javascript .hljs-function,
+      .language-javascript .hljs-title.function_,
+      code.language-javascript .hljs-title.function_ {
+        color: #dcdcaa !important;
+      }
+
+      .language-javascript .hljs-built_in,
+      code.language-javascript .hljs-built_in {
+        color: #4ec9b0 !important;
+      }
+
+      .language-javascript .hljs-class .hljs-title,
+      code.language-javascript .hljs-class .hljs-title,
+      .language-javascript .hljs-title.class_,
+      code.language-javascript .hljs-title.class_ {
+        color: #4ec9b0 !important;
+      }
+
+      .language-javascript .hljs-params,
+      code.language-javascript .hljs-params {
+        color: #d4d4d4 !important;
+      }
+
+      .language-javascript .hljs-property,
+      code.language-javascript .hljs-property,
+      .language-javascript .hljs-attr,
+      code.language-javascript .hljs-attr {
+        color: #9cdcfe !important;
+      }
+
+      /* Variables and identifiers */
+      .language-javascript .hljs-variable,
+      code.language-javascript .hljs-variable {
+        color: #9cdcfe !important;
+      }
+
+      .language-javascript .hljs-variable.language_,
+      code.language-javascript .hljs-variable.language_ {
+        color: #569cd6 !important;
+      }
+
+      /* Constants */
+      .language-javascript .hljs-variable.constant_,
+      code.language-javascript .hljs-variable.constant_ {
+        color: #4fc1ff !important;
+      }
+
+      /* Method calls */
+      .language-javascript .hljs-title.function_.invoke__,
+      code.language-javascript .hljs-title.function_.invoke__ {
+        color: #dcdcaa !important;
+      }
+
+      /* Regex */
+      .language-javascript .hljs-regexp,
+      code.language-javascript .hljs-regexp {
+        color: #d16969 !important;
+      }
+
+      /* Template strings */
+      .language-javascript .hljs-subst,
+      code.language-javascript .hljs-subst {
+        color: #d4d4d4 !important;
+      }
+
+      /* Base color for JavaScript code */
+      code.language-javascript {
+        color: #d4d4d4 !important;
+      }
+
+      /* Operators and punctuation (if highlight.js generates them) */
+      code.language-javascript .hljs-punctuation,
+      code.language-javascript .hljs-operator {
+        color: #d4d4d4 !important;
+      }
+
+      /* Additional syntax elements */
+      code.language-javascript .hljs-selector-attr,
+      code.language-javascript .hljs-selector-class,
+      code.language-javascript .hljs-selector-id,
+      code.language-javascript .hljs-selector-pseudo {
+        color: #d4d4d4 !important;
+      }
+
+      /* Keywords */
+      .language-javascript .hljs-keyword,
+      code.language-javascript .hljs-keyword {
+        color: #569cd6 !important;
+      }
+
+      /* Literals */
+      .language-javascript .hljs-literal,
+      code.language-javascript .hljs-literal {
+        color: #569cd6 !important;
+      }
+
+      /* Numbers */
+      .language-javascript .hljs-number,
+      code.language-javascript .hljs-number {
+        color: #b5cea8 !important;
+      }
+
+      /* Strings */
+      .language-javascript .hljs-string,
+      code.language-javascript .hljs-string {
+        color: #ce9178 !important;
+      }
+
+      /* Comments */
+      .language-javascript .hljs-comment,
+      code.language-javascript .hljs-comment {
+        color: #6a9955 !important;
+      }
+
+      /* Type annotations and generics */
+      .language-javascript .hljs-type,
+      code.language-javascript .hljs-type {
+        color: #4ec9b0 !important;
+      }
+
+      /* Object properties and method names */
+      .language-javascript .hljs-title.method__,
+      code.language-javascript .hljs-title.method__ {
+        color: #dcdcaa !important;
+      }
+
+      /* Object literal keys */
+      .language-javascript .hljs-attr,
+      code.language-javascript .hljs-attr {
+        color: #9cdcfe !important;
+      }
+
+      /* Fix conflicts - JavaScript name/title should not use string color */
+      .language-javascript .hljs-name:not(.hljs-tag .hljs-name),
+      code.language-javascript .hljs-name:not(.hljs-tag .hljs-name) {
+        color: #d4d4d4 !important;
+      }
+
+      .language-javascript
+        .hljs-title:not(.hljs-tag .hljs-title):not(.function_):not(.class_),
+      code.language-javascript
+        .hljs-title:not(.hljs-tag .hljs-title):not(.function_):not(.class_) {
+        color: #dcdcaa !important;
+      }
+
+      /* Ensure JavaScript rules override general rules */
+      .language-javascript .hljs-keyword,
+      code.language-javascript .hljs-keyword {
+        color: #569cd6 !important;
+      }
+
+      .language-javascript .hljs-literal,
+      code.language-javascript .hljs-literal {
+        color: #569cd6 !important;
+      }
+
+      .language-javascript .hljs-string,
+      code.language-javascript .hljs-string {
+        color: #ce9178 !important;
+      }
+
+      .language-javascript .hljs-number,
+      code.language-javascript .hljs-number {
+        color: #b5cea8 !important;
+      }
+
+      .language-javascript .hljs-comment,
+      code.language-javascript .hljs-comment {
+        color: #6a9955 !important;
       }
 
       /* Scrollbar */
@@ -279,7 +894,30 @@
         background: var(--accent);
       }
 
+      @media (max-width: 1080px) {
+        #sidebar {
+          display: none;
+        }
+
+        #top-bar {
+          display: block;
+        }
+
+        #documentation {
+          margin-left: 0;
+          padding: 4rem 2rem 2rem 2rem;
+        }
+      }
+
       @media (max-width: 768px) {
+        #sidebar {
+          width: 280px;
+        }
+
+        #documentation {
+          padding: 4rem 1rem 2rem 1rem;
+        }
+
         .hero-title {
           font-size: 3rem;
         }
@@ -292,13 +930,55 @@
           padding: 2rem 1.5rem;
         }
 
-        #documentation {
+        .example-container {
+          margin: 1.5rem 0;
+          border-radius: 8px;
+        }
+
+        .example-panel {
+          grid-template-columns: 1fr;
+        }
+
+        .example-preview {
+          border-right: none;
+          border-bottom: 1px solid var(--border);
           padding: 2rem 1rem;
+        }
+
+        .example-code {
+          padding: 1rem;
+        }
+
+        .example-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.75rem;
+        }
+
+        .example-tabs {
+          width: 100%;
+        }
+
+        .example-tab {
+          padding: 0.5rem 0.875rem;
+          font-size: 0.8125rem;
         }
       }
     </style>
   </head>
   <body>
+    <!-- Top Bar (Mobile) -->
+    <div id="top-bar" class="collapsed">
+      <div id="top-bar-header">
+        <button id="top-bar-toggle" aria-label="Toggle navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+      <nav id="top-bar-nav"></nav>
+    </div>
+
     <!-- Hero Section -->
     <section id="hero">
       <canvas id="canvas"></canvas>
@@ -307,6 +987,12 @@
         <p class="hero-subtitle">Web Components Library</p>
       </div>
     </section>
+
+    <!-- Sidebar (Desktop) -->
+    <aside id="sidebar">
+      <h3>Components</h3>
+      <nav id="sidebar-nav"></nav>
+    </aside>
 
     <!-- Documentation Sections -->
     <div id="documentation"></div>
@@ -369,47 +1055,88 @@
       // Markdown Parser and Documentation Generator
       class DocumentationGenerator {
         constructor() {
-          this.componentsFolder = 'web-components/';
+          this.componentsFolder = "web-components/";
         }
 
         async loadMarkdownFiles() {
           try {
-            const response = await fetch(this.componentsFolder);
-            const text = await response.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(text, 'text/html');
-            const links = Array.from(doc.querySelectorAll('a'))
-              .map(a => a.href)
-              .filter(href => href.endsWith('.md'));
+            const files = [];
+            const categories = ["Blueprints", "Visuals"];
 
-            // Fallback: try to load known files
-            if (links.length === 0) {
-              const knownFiles = ['icon-svg.md'];
-              return knownFiles;
+            for (const category of categories) {
+              try {
+                const response = await fetch(
+                  `${this.componentsFolder}${category}/`
+                );
+                const text = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, "text/html");
+                const links = Array.from(doc.querySelectorAll("a"))
+                  .map((a) => a.href)
+                  .filter((href) => href.endsWith(".md"));
+
+                links.forEach((link) => {
+                  const filename = link.split("/").pop();
+                  files.push({
+                    path: `${category}/${filename}`,
+                    category,
+                    filename,
+                  });
+                });
+              } catch (error) {
+                console.warn(`Failed to load category ${category}:`, error);
+              }
             }
 
-            return links.map(link => link.split('/').pop());
+            // Fallback: try known files if directory listing fails
+            if (files.length === 0) {
+              return [
+                {
+                  path: "Blueprints/h-stack.md",
+                  category: "Blueprints",
+                  filename: "h-stack.md",
+                },
+                {
+                  path: "Visuals/icon-svg.md",
+                  category: "Visuals",
+                  filename: "icon-svg.md",
+                },
+              ];
+            }
+
+            return files;
           } catch (error) {
             // Fallback to known files
-            return ['icon-svg.md'];
+            return [
+              {
+                path: "Blueprints/h-stack.md",
+                category: "Blueprints",
+                filename: "h-stack.md",
+              },
+              {
+                path: "Visuals/icon-svg.md",
+                category: "Visuals",
+                filename: "icon-svg.md",
+              },
+            ];
           }
         }
 
-        async fetchMarkdownFile(filename) {
-          const response = await fetch(`${this.componentsFolder}${filename}`);
+        async fetchMarkdownFile(filePath) {
+          const response = await fetch(`${this.componentsFolder}${filePath}`);
           return await response.text();
         }
 
         parseMarkdown(markdown) {
-          const lines = markdown.split('\n');
-          let html = '';
+          const lines = markdown.split("\n");
+          let html = "";
           let i = 0;
 
           while (i < lines.length) {
             const line = lines[i];
 
             // Handle H2 (##)
-            if (line.startsWith('## ')) {
+            if (line.startsWith("## ")) {
               const content = line.substring(3);
               const encoded = this.encodeHTMLTags(content);
               html += `<h2>${encoded}</h2>\n`;
@@ -418,7 +1145,7 @@
             }
 
             // Handle H3 (###)
-            if (line.startsWith('### ')) {
+            if (line.startsWith("### ")) {
               const content = line.substring(4);
               html += `<h3>${content}</h3>\n`;
               i++;
@@ -426,7 +1153,7 @@
             }
 
             // Handle list items (-)
-            if (line.trim().startsWith('- ')) {
+            if (line.trim().startsWith("- ")) {
               const content = line.trim().substring(2);
               const processed = this.processInlineFormatting(content);
               html += `<li>${processed}</li>\n`;
@@ -434,23 +1161,37 @@
               continue;
             }
 
-            // Handle code blocks
-            if (line.trim().startsWith('``` html')) {
-              const { html: codeBlockHtml, nextIndex } = this.parseHTMLCodeBlocks(lines, i);
-              html += codeBlockHtml;
+            // Skip HTML code blocks (will be collected separately)
+            if (
+              line.trim().startsWith("```html") ||
+              line.trim().startsWith("``` html")
+            ) {
+              const { nextIndex } = this.skipHTMLCodeBlocks(lines, i);
               i = nextIndex;
               continue;
             }
 
-            if (line.trim().startsWith('``` js')) {
-              const { html: codeBlockHtml, nextIndex } = this.parseJSCodeBlock(lines, i);
+            if (
+              line.trim().startsWith("```js") ||
+              line.trim().startsWith("``` js") ||
+              line.trim().startsWith("````js") ||
+              line.trim().startsWith("```` js")
+            ) {
+              const { html: codeBlockHtml, nextIndex } = this.parseJSCodeBlock(
+                lines,
+                i
+              );
               html += codeBlockHtml;
               i = nextIndex;
               continue;
             }
 
             // Handle paragraphs
-            if (line.trim() !== '' && !line.startsWith('#') && !line.startsWith('-')) {
+            if (
+              line.trim() !== "" &&
+              !line.startsWith("#") &&
+              !line.startsWith("-")
+            ) {
               const processed = this.processInlineFormatting(line.trim());
               html += `<p>${processed}</p>\n`;
             }
@@ -461,13 +1202,81 @@
           return html;
         }
 
+        skipHTMLCodeBlocks(lines, startIndex) {
+          let i = startIndex;
+          while (i < lines.length) {
+            if (
+              lines[i].trim().startsWith("```html") ||
+              lines[i].trim().startsWith("``` html")
+            ) {
+              i++; // Skip the ``` html line
+              i++; // Skip the comment line
+              // Skip code until closing ```
+              while (i < lines.length && !lines[i].trim().startsWith("```")) {
+                i++;
+              }
+              i++; // Skip closing ```
+            } else if (lines[i].trim().startsWith("```")) {
+              break;
+            } else if (
+              lines[i].trim() === "" ||
+              lines[i].startsWith("## ") ||
+              lines[i].startsWith("### ") ||
+              lines[i].startsWith("- ")
+            ) {
+              break;
+            } else {
+              i++;
+            }
+          }
+          return { nextIndex: i };
+        }
+
+        collectAllHTMLCodeBlocks(markdown) {
+          const lines = markdown.split("\n");
+          const codeBlocks = [];
+          let i = 0;
+
+          while (i < lines.length) {
+            if (
+              lines[i].trim().startsWith("```html") ||
+              lines[i].trim().startsWith("``` html")
+            ) {
+              i++; // Skip the ``` html line
+
+              // Get the comment line (title)
+              const commentLine = lines[i].trim();
+              const titleMatch = commentLine.match(
+                new RegExp("<!--\\s*(.+?)\\s*-->")
+              );
+              const title = titleMatch ? titleMatch[1] : "Example";
+
+              i++; // Skip the comment line
+
+              // Collect code until closing ```
+              let code = "";
+              while (i < lines.length && !lines[i].trim().startsWith("```")) {
+                code += lines[i] + "\n";
+                i++;
+              }
+
+              codeBlocks.push({ title, code: code.trim() });
+              i++; // Skip closing ```
+            } else {
+              i++;
+            }
+          }
+
+          return codeBlocks;
+        }
+
         encodeHTMLTags(text) {
-          return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          return text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
 
         processInlineFormatting(text) {
           // Convert `text` to <strong>text</strong>
-          return text.replace(/`([^`]+)`/g, '<strong>$1</strong>');
+          return text.replace(/`([^`]+)`/g, "<strong>$1</strong>");
         }
 
         parseHTMLCodeBlocks(lines, startIndex) {
@@ -475,28 +1284,38 @@
           let i = startIndex;
 
           while (i < lines.length) {
-            if (lines[i].trim().startsWith('``` html')) {
+            if (
+              lines[i].trim().startsWith("```html") ||
+              lines[i].trim().startsWith("``` html")
+            ) {
               i++; // Skip the ``` html line
 
               // Get the comment line (title)
               const commentLine = lines[i].trim();
-              const titleMatch = commentLine.match(/<!--\s*(.+?)\s*-->/);
-              const title = titleMatch ? titleMatch[1] : 'Example';
+              const titleMatch = commentLine.match(
+                new RegExp("<!--\\s*(.+?)\\s*-->")
+              );
+              const title = titleMatch ? titleMatch[1] : "Example";
 
               i++; // Skip the comment line
 
               // Collect code until closing ```
-              let code = '';
-              while (i < lines.length && !lines[i].trim().startsWith('```')) {
-                code += lines[i] + '\n';
+              let code = "";
+              while (i < lines.length && !lines[i].trim().startsWith("```")) {
+                code += lines[i] + "\n";
                 i++;
               }
 
               codeBlocks.push({ title, code: code.trim() });
               i++; // Skip closing ```
-            } else if (lines[i].trim().startsWith('```')) {
+            } else if (lines[i].trim().startsWith("```")) {
               break; // Hit a different code block type
-            } else if (lines[i].trim() === '' || lines[i].startsWith('## ') || lines[i].startsWith('### ') || lines[i].startsWith('- ')) {
+            } else if (
+              lines[i].trim() === "" ||
+              lines[i].startsWith("## ") ||
+              lines[i].startsWith("### ") ||
+              lines[i].startsWith("- ")
+            ) {
               break; // Hit other content
             } else {
               i++;
@@ -504,36 +1323,38 @@
           }
 
           if (codeBlocks.length === 0) {
-            return { html: '', nextIndex: startIndex + 1 };
+            return { html: "", nextIndex: startIndex + 1 };
           }
 
-          const id = `html-code-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+          const id = `html-code-${Date.now()}-${Math.random()
+            .toString(36)
+            .substr(2, 9)}`;
 
           let html = '<div class="code-block-container">\n';
           html += '<div class="code-tabs">\n';
 
           codeBlocks.forEach((block, index) => {
-            const activeClass = index === 0 ? ' active' : '';
+            const activeClass = index === 0 ? " active" : "";
             html += `<button class="code-tab${activeClass}" data-target="${id}" data-index="${index}">${block.title}</button>\n`;
           });
 
-          html += '</div>\n';
+          html += "</div>\n";
           html += '<div class="code-display">\n';
           html += '<div class="code-header">\n';
           html += '<span class="code-language">HTML</span>\n';
           html += `<button class="copy-btn" data-copy-type="html" data-target="${id}">Copy Code</button>\n`;
-          html += '</div>\n';
+          html += "</div>\n";
           html += `<div class="code-content" id="${id}">\n`;
 
           codeBlocks.forEach((block, index) => {
-            const displayStyle = index === 0 ? '' : ' style="display:none;"';
+            const displayStyle = index === 0 ? "" : ' style="display:none;"';
             const escapedCode = this.escapeHTML(block.code);
             html += `<pre data-code-index="${index}"${displayStyle}><code class="language-html">${escapedCode}</code></pre>\n`;
           });
 
-          html += '</div>\n';
-          html += '</div>\n';
-          html += '</div>\n';
+          html += "</div>\n";
+          html += "</div>\n";
+          html += "</div>\n";
 
           // Store the code blocks for copy functionality
           if (!window.codeBlocks) window.codeBlocks = {};
@@ -543,38 +1364,65 @@
         }
 
         parseJSCodeBlock(lines, startIndex) {
-          let i = startIndex + 1; // Skip ``` js line
-          let fullCode = '';
+          let i = startIndex + 1; // Skip ``` js or ```` js line
+          let fullCode = "";
 
-          // Collect all code until closing ```
-          while (i < lines.length && !lines[i].trim().startsWith('```')) {
-            fullCode += lines[i] + '\n';
+          // Collect all code until closing ``` or ````
+          // Check for 4 backticks first (since ```` also starts with ```)
+          while (i < lines.length) {
+            const trimmed = lines[i].trim();
+            if (trimmed.startsWith("````") || trimmed === "````") {
+              break; // Found closing 4 backticks
+            }
+            if (trimmed.startsWith("```") || trimmed === "```") {
+              break; // Found closing 3 backticks
+            }
+            fullCode += lines[i] + "\n";
             i++;
           }
 
-          const id = `js-code-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+          const id = `js-code-${Date.now()}-${Math.random()
+            .toString(36)
+            .substr(2, 9)}`;
 
           // Remove comments for display
           const displayCode = this.removeJSComments(fullCode);
-          const escapedDisplayCode = this.escapeHTML(displayCode.trim());
+          const codeLines = displayCode.trim().split("\n");
+          const isLongCode = codeLines.length > 11;
+          const truncatedCode = isLongCode
+            ? codeLines.slice(0, 11).join("\n")
+            : displayCode.trim();
+          const escapedTruncatedCode = this.escapeHTML(truncatedCode);
+          const escapedFullCode = this.escapeHTML(displayCode.trim());
 
           let html = '<div class="code-block-container">\n';
           html += '<div class="code-display">\n';
           html += '<div class="code-header">\n';
           html += '<span class="code-language">JavaScript</span>\n';
+          html +=
+            '<div style="display: flex; gap: 0.5rem; align-items: center;">\n';
+          if (isLongCode) {
+            html += `<button class="expand-btn" data-target="${id}" data-expanded="false">Expand Code</button>\n`;
+          }
           html += `<button class="copy-btn" data-copy-type="js" data-target="${id}">Copy Code</button>\n`;
-          html += '</div>\n';
+          html += "</div>\n";
+          html += "</div>\n";
           html += `<div class="code-content" id="${id}">\n`;
-          html += `<pre><code class="language-javascript">${escapedDisplayCode}</code></pre>\n`;
-          html += '</div>\n';
-          html += '</div>\n';
-          html += '</div>\n';
+          html += `<pre><code class="language-javascript">${escapedTruncatedCode}</code></pre>\n`;
+          html += "</div>\n";
+          html += "</div>\n";
+          html += "</div>\n";
 
-          // Store both versions
+          // Store both versions (raw text for expand/collapse, escaped for initial render)
           if (!window.codeBlocks) window.codeBlocks = {};
           window.codeBlocks[id] = {
             display: displayCode.trim(),
-            copy: fullCode.trim()
+            copy: fullCode.trim(),
+            truncatedRaw: truncatedCode,
+            fullRaw: displayCode.trim(),
+            truncatedEscaped: escapedTruncatedCode,
+            fullEscaped: escapedFullCode,
+            isLong: isLongCode,
           };
 
           return { html, nextIndex: i + 1 };
@@ -582,97 +1430,603 @@
 
         removeJSComments(code) {
           // Remove block comments (/* ... */)
-          let result = code.replace(/\/\*[\s\S]*?\*\//g, '');
+          let result = code.replace(/\/\*[\s\S]*?\*\//g, "");
 
           // Remove single-line comments (//)
-          result = result.replace(/\/\/.*$/gm, '');
+          result = result.replace(/\/\/.*$/gm, "");
 
           // Clean up excessive blank lines
-          result = result.replace(/\n\s*\n\s*\n/g, '\n\n');
+          result = result.replace(/\n\s*\n\s*\n/g, "\n\n");
 
           return result;
         }
 
         escapeHTML(text) {
-          const div = document.createElement('div');
+          const div = document.createElement("div");
           div.textContent = text;
           return div.innerHTML;
         }
 
-        async generate() {
-          const files = await this.loadMarkdownFiles();
-          const documentation = document.getElementById('documentation');
-
-          for (const file of files) {
-            const markdown = await this.fetchMarkdownFile(file);
-            const html = this.parseMarkdown(markdown);
-
-            const section = document.createElement('div');
-            section.className = 'component-section';
-            section.innerHTML = html;
-
-            documentation.appendChild(section);
+        createUnifiedExampleSection(allCodeBlocks, baseId) {
+          if (allCodeBlocks.length === 0) {
+            return "";
           }
 
+          const unifiedId = `example-${baseId}`;
+
+          let html = '<div class="example-container">\n';
+
+          // Single unified header with tabs and copy button
+          html += '<div class="example-header">\n';
+
+          // Tabs (only if multiple examples)
+          if (allCodeBlocks.length > 1) {
+            html += '<div class="example-tabs">\n';
+            allCodeBlocks.forEach((block, index) => {
+              const activeClass = index === 0 ? " active" : "";
+              html += `<button class="example-tab${activeClass}" data-target="${unifiedId}" data-index="${index}">${block.title}</button>\n`;
+            });
+            html += "</div>\n";
+          } else {
+            // Single example - show title as header text
+            html += `<div class="example-title">${allCodeBlocks[0].title}</div>\n`;
+          }
+
+          // Copy button
+          html += `<button class="copy-btn" data-copy-type="html" data-target="${unifiedId}">Copy</button>\n`;
+          html += "</div>\n"; // end example-header
+
+          // Unified content area with preview and code side-by-side
+          html += `<div class="example-content-wrapper" id="${unifiedId}">\n`;
+
+          allCodeBlocks.forEach((block, index) => {
+            const activeClass = index === 0 ? " active" : "";
+
+            html += `<div class="example-panel${activeClass}" data-example-index="${index}">\n`;
+
+            // Preview section
+            html += '<div class="example-preview">\n';
+            html += `<div class="preview-content" data-preview-index="${index}"></div>\n`;
+            html += "</div>\n";
+
+            // Code section
+            html += '<div class="example-code">\n';
+            const escapedCode = this.escapeHTML(block.code);
+            html += `<pre><code class="language-html">${escapedCode}</code></pre>\n`;
+            html += "</div>\n";
+
+            html += "</div>\n"; // end example-panel
+          });
+
+          html += "</div>\n"; // end example-content-wrapper
+          html += "</div>\n"; // end example-container
+
+          // Store for rendering and copy functionality
+          if (!window.previewBlocks) window.previewBlocks = {};
+          window.previewBlocks[unifiedId] = allCodeBlocks;
+
+          if (!window.codeBlocks) window.codeBlocks = {};
+          window.codeBlocks[unifiedId] = allCodeBlocks;
+
+          return html;
+        }
+
+        extractComponentName(markdown) {
+          const lines = markdown.split("\n");
+          for (const line of lines) {
+            if (line.startsWith("## ")) {
+              const content = line.substring(3).trim();
+              // Return the full heading text as-is (e.g., "<h-stack>")
+              return content;
+            }
+          }
+          return null;
+        }
+
+        extractTagNameForId(name) {
+          // Extract tag name from <tag-name> for creating IDs
+          const tagMatch = name.match(/<([^>]+)>/);
+          if (tagMatch) {
+            return tagMatch[1]; // Return tag name without brackets
+          }
+          // If no HTML tags, return name as-is (lowercased and sanitized)
+          return name
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "");
+        }
+
+        createIdFromName(name) {
+          return name
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "");
+        }
+
+        async generate() {
+          const files = await this.loadMarkdownFiles();
+          const documentation = document.getElementById("documentation");
+          const sidebarNav = document.getElementById("sidebar-nav");
+          const componentsByCategory = {};
+
+          // Generate sections with HTML code blocks per file
+          for (const file of files) {
+            const markdown = await this.fetchMarkdownFile(file.path);
+            const componentName = this.extractComponentName(markdown);
+            const componentId = componentName
+              ? this.createIdFromName(this.extractTagNameForId(componentName))
+              : `component-${files.indexOf(file)}`;
+
+            const html = this.parseMarkdown(markdown);
+            const htmlCodeBlocks = this.collectAllHTMLCodeBlocks(markdown);
+
+            const section = document.createElement("div");
+            section.className = "component-section";
+            section.id = componentId;
+            section.innerHTML = html;
+
+            // Insert unified example section above JS code
+            if (htmlCodeBlocks.length > 0) {
+              const baseId = `${Date.now()}-${Math.random()
+                .toString(36)
+                .substr(2, 9)}`;
+              const unifiedHtml = this.createUnifiedExampleSection(
+                htmlCodeBlocks,
+                baseId
+              );
+
+              // Find the JS code block container by looking for JavaScript language label
+              const codeContainers = section.querySelectorAll(
+                ".code-block-container"
+              );
+              let jsContainer = null;
+              codeContainers.forEach((container) => {
+                const langSpan = container.querySelector(".code-language");
+                if (langSpan && langSpan.textContent.trim() === "JavaScript") {
+                  jsContainer = container;
+                }
+              });
+
+              // Insert unified example section
+              const tempDiv = document.createElement("div");
+              tempDiv.innerHTML = unifiedHtml;
+              if (jsContainer) {
+                section.insertBefore(tempDiv.firstElementChild, jsContainer);
+              } else {
+                section.appendChild(tempDiv.firstElementChild);
+              }
+            }
+
+            documentation.appendChild(section);
+
+            // Store component info grouped by category
+            if (componentName) {
+              if (!componentsByCategory[file.category]) {
+                componentsByCategory[file.category] = [];
+              }
+              componentsByCategory[file.category].push({
+                name: componentName,
+                id: componentId,
+              });
+            }
+          }
+
+          // Build sidebar navigation (desktop) and top bar navigation (mobile)
+          const topBarNav = document.getElementById("top-bar-nav");
+
+          // Helper function to create navigation links
+          const createNavLinks = (component, container, isMobile) => {
+            const link = document.createElement("a");
+            link.href = `#${component.id}`;
+            link.textContent = component.name;
+            link.addEventListener("click", (e) => {
+              e.preventDefault();
+              const target = document.getElementById(component.id);
+              if (target) {
+                if (isMobile) {
+                  // Account for top bar height on mobile
+                  const topBar = document.getElementById("top-bar");
+                  const topBarHeight = topBar ? topBar.offsetHeight : 60;
+                  const targetPosition =
+                    target.getBoundingClientRect().top +
+                    window.pageYOffset -
+                    topBarHeight;
+                  window.scrollTo({ top: targetPosition, behavior: "smooth" });
+
+                  // Close top bar on mobile after navigation
+                  if (window.innerWidth <= 1080 && topBar) {
+                    topBar.classList.remove("expanded");
+                    topBar.classList.add("collapsed");
+                  }
+                } else {
+                  target.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+              }
+            });
+            container.appendChild(link);
+          };
+
+          // Build navigation grouped by category
+          Object.keys(componentsByCategory)
+            .sort()
+            .forEach((category) => {
+              const components = componentsByCategory[category];
+
+              // Sidebar: Category header
+              const sidebarCategoryHeader = document.createElement("div");
+              sidebarCategoryHeader.className = "nav-category-header";
+              sidebarCategoryHeader.textContent = category;
+              sidebarNav.appendChild(sidebarCategoryHeader);
+
+              // Sidebar: Category links
+              components.forEach((component) => {
+                createNavLinks(component, sidebarNav, false);
+              });
+
+              // Top bar: Category header
+              if (topBarNav) {
+                const topBarCategoryHeader = document.createElement("div");
+                topBarCategoryHeader.className = "nav-category-header";
+                topBarCategoryHeader.textContent = category;
+                topBarNav.appendChild(topBarCategoryHeader);
+
+                // Top bar: Category links
+                components.forEach((component) => {
+                  createNavLinks(component, topBarNav, true);
+                });
+              }
+            });
+
           // Initialize syntax highlighting
-          document.querySelectorAll('pre code').forEach((block) => {
+          document.querySelectorAll("pre code").forEach((block) => {
             hljs.highlightElement(block);
           });
+
+          // Render previews
+          this.renderPreviews();
 
           // Initialize event listeners
           this.initializeEventListeners();
         }
 
+        renderPreviews() {
+          // Wait for components to be registered and DOM to be ready
+          let attempts = 0;
+          const maxAttempts = 50; // 2.5 seconds max wait
+
+          const tryRender = () => {
+            attempts++;
+
+            if (!window.previewBlocks) {
+              if (attempts < maxAttempts) {
+                setTimeout(tryRender, 50);
+              }
+              return;
+            }
+
+            // Check if custom elements are registered
+            // Don't require both - some previews might only use one component
+            const hStackDefined = customElements.get("h-stack");
+            const iconSvgDefined = customElements.get("icon-svg");
+
+            // If neither is defined yet, keep trying (but don't wait forever)
+            // After a few attempts, render anyway - components might upgrade later
+            if (!hStackDefined && !iconSvgDefined && attempts < 10) {
+              setTimeout(tryRender, 50);
+              return;
+            }
+
+            // If we've tried many times and still no components, render anyway
+            // The browser will upgrade custom elements when they're inserted
+
+            // Render all previews
+            console.log(
+              "Rendering previews, found",
+              Object.keys(window.previewBlocks).length,
+              "preview sections"
+            );
+            Object.keys(window.previewBlocks).forEach((exampleId) => {
+              const blocks = window.previewBlocks[exampleId];
+              const wrapper = document.getElementById(exampleId);
+              if (!wrapper) {
+                console.warn("Example wrapper not found:", exampleId);
+                return;
+              }
+
+              blocks.forEach((block, index) => {
+                const previewContent = wrapper.querySelector(
+                  `.example-panel[data-example-index="${index}"] .preview-content[data-preview-index="${index}"]`
+                );
+                if (!previewContent) return;
+
+                // Skip if already rendered
+                if (previewContent.children.length > 0) return;
+
+                // Insert HTML directly - custom elements will upgrade when inserted into visible DOM
+                if (!block.code || block.code.trim() === "") {
+                  console.warn(
+                    "Empty code block for preview",
+                    exampleId,
+                    "index",
+                    index
+                  );
+                  return;
+                }
+
+                previewContent.innerHTML = block.code;
+
+                // Force a reflow to ensure custom elements are upgraded
+                void previewContent.offsetHeight;
+
+                // Find all custom elements (elements with hyphens in tag name)
+                const allElements = previewContent.querySelectorAll("*");
+                const customEls = Array.from(allElements).filter((el) =>
+                  el.tagName.includes("-")
+                );
+
+                // Force all custom elements to re-render with their attributes
+                customEls.forEach((el) => {
+                  const tagName = el.tagName.toLowerCase();
+                  const constructor = customElements.get(tagName);
+
+                  let attributesToRefresh = [];
+                  if (constructor && constructor.observedAttributes) {
+                    attributesToRefresh = constructor.observedAttributes;
+                  } else {
+                    attributesToRefresh = Array.from(el.attributes).map(
+                      (attr) => attr.name
+                    );
+                  }
+
+                  attributesToRefresh.forEach((attrName) => {
+                    const value = el.getAttribute(attrName);
+                    if (value !== null) {
+                      el.removeAttribute(attrName);
+                      el.setAttribute(attrName, value);
+                    }
+                  });
+
+                  if (typeof el.render === "function") {
+                    el.render();
+                  }
+                });
+              });
+            });
+          };
+
+          // Start trying after a short delay to let the module load
+          setTimeout(tryRender, 100);
+        }
+
+        setupScrollSpy(components) {
+          // Adjust rootMargin based on screen size (account for top bar on mobile)
+          const isMobile = window.innerWidth <= 1080;
+          const topBar = document.getElementById("top-bar");
+          const topBarHeight = isMobile && topBar ? topBar.offsetHeight : 0;
+          const topOffset =
+            topBarHeight > 0 ? `-${topBarHeight + 20}px` : "-10%";
+
+          const observerOptions = {
+            root: null,
+            rootMargin: `${topOffset} 0px -70% 0px`,
+            threshold: 0.1,
+          };
+
+          const clearActiveStates = () => {
+            const sidebarNav = document.getElementById("sidebar-nav");
+            const topBarNav = document.getElementById("top-bar-nav");
+
+            if (sidebarNav) {
+              sidebarNav.querySelectorAll("a").forEach((a) => {
+                a.classList.remove("active");
+              });
+            }
+
+            if (topBarNav) {
+              topBarNav.querySelectorAll("a").forEach((a) => {
+                a.classList.remove("active");
+              });
+            }
+          };
+
+          const observer = new IntersectionObserver((entries) => {
+            // Check if we're at the top of the page
+            const scrollY = window.scrollY || window.pageYOffset;
+            const heroHeight =
+              document.getElementById("hero")?.offsetHeight || 0;
+
+            // If we're still in the hero section or at the very top, don't highlight anything
+            if (scrollY < heroHeight - 100) {
+              clearActiveStates();
+              return;
+            }
+
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && entry.intersectionRatio > 0.1) {
+                const id = entry.target.id;
+                const sidebarNav = document.getElementById("sidebar-nav");
+                const topBarNav = document.getElementById("top-bar-nav");
+
+                // Update sidebar nav
+                if (sidebarNav) {
+                  sidebarNav.querySelectorAll("a").forEach((a) => {
+                    a.classList.remove("active");
+                    if (a.getAttribute("href") === `#${id}`) {
+                      a.classList.add("active");
+                    }
+                  });
+                }
+
+                // Update top bar nav
+                if (topBarNav) {
+                  topBarNav.querySelectorAll("a").forEach((a) => {
+                    a.classList.remove("active");
+                    if (a.getAttribute("href") === `#${id}`) {
+                      a.classList.add("active");
+                    }
+                  });
+                }
+              }
+            });
+          }, observerOptions);
+
+          components.forEach((component) => {
+            const element = document.getElementById(component.id);
+            if (element) {
+              observer.observe(element);
+            }
+          });
+
+          // Clear active states on scroll when at top
+          let scrollTimeout;
+          window.addEventListener("scroll", () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+              const scrollY = window.scrollY || window.pageYOffset;
+              const heroHeight =
+                document.getElementById("hero")?.offsetHeight || 0;
+
+              if (scrollY < heroHeight - 100) {
+                clearActiveStates();
+              }
+            }, 100);
+          });
+        }
+
         initializeEventListeners() {
+          const self = this;
+
           // Code tab switching
-          document.querySelectorAll('.code-tab').forEach(tab => {
-            tab.addEventListener('click', (e) => {
+          document.querySelectorAll(".code-tab").forEach((tab) => {
+            tab.addEventListener("click", (e) => {
               const target = e.target.dataset.target;
               const index = parseInt(e.target.dataset.index);
 
               // Update active tab
-              document.querySelectorAll(`.code-tab[data-target="${target}"]`).forEach(t => {
-                t.classList.remove('active');
-              });
-              e.target.classList.add('active');
+              document
+                .querySelectorAll(`.code-tab[data-target="${target}"]`)
+                .forEach((t) => {
+                  t.classList.remove("active");
+                });
+              e.target.classList.add("active");
 
               // Show corresponding code
               const container = document.getElementById(target);
-              container.querySelectorAll('pre').forEach((pre, i) => {
-                pre.style.display = i === index ? '' : 'none';
+              container.querySelectorAll("pre").forEach((pre, i) => {
+                pre.style.display = i === index ? "" : "none";
               });
             });
           });
 
           // Copy buttons
-          document.querySelectorAll('.copy-btn').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
+          document.querySelectorAll(".copy-btn").forEach((btn) => {
+            btn.addEventListener("click", async (e) => {
               const target = e.target.dataset.target;
               const copyType = e.target.dataset.copyType;
 
-              let textToCopy = '';
+              let textToCopy = "";
 
-              if (copyType === 'html') {
+              if (copyType === "html") {
                 const codeBlocks = window.codeBlocks[target];
-                const activeTab = document.querySelector(`.code-tab.active[data-target="${target}"]`);
-                const activeIndex = parseInt(activeTab.dataset.index);
+                if (!codeBlocks) return;
+
+                // Find active panel index
+                const wrapper = document.getElementById(target);
+                if (!wrapper) return;
+
+                const activePanel = wrapper.querySelector(
+                  ".example-panel.active"
+                );
+                if (!activePanel) return;
+
+                const activeIndex = parseInt(activePanel.dataset.exampleIndex);
                 textToCopy = codeBlocks[activeIndex].code;
-              } else if (copyType === 'js') {
+              } else if (copyType === "js") {
                 const codeData = window.codeBlocks[target];
                 textToCopy = codeData.copy;
               }
 
               try {
                 await navigator.clipboard.writeText(textToCopy);
-                e.target.textContent = 'Copied!';
-                e.target.classList.add('copied');
+                e.target.textContent = "Copied!";
+                e.target.classList.add("copied");
 
                 setTimeout(() => {
-                  e.target.textContent = 'Copy Code';
-                  e.target.classList.remove('copied');
+                  e.target.textContent = "Copy";
+                  e.target.classList.remove("copied");
                 }, 2000);
               } catch (err) {
-                console.error('Failed to copy:', err);
+                console.error("Failed to copy:", err);
+              }
+            });
+          });
+
+          // Unified example tab switching (using event delegation)
+          document.addEventListener("click", (e) => {
+            if (e.target.classList.contains("example-tab")) {
+              const target = e.target.dataset.target;
+              const index = parseInt(e.target.dataset.index);
+
+              // Update active tab
+              document
+                .querySelectorAll(`.example-tab[data-target="${target}"]`)
+                .forEach((t) => {
+                  t.classList.remove("active");
+                });
+              e.target.classList.add("active");
+
+              // Show corresponding panel (contains both preview and code)
+              const wrapper = document.getElementById(target);
+              if (wrapper) {
+                wrapper
+                  .querySelectorAll(".example-panel")
+                  .forEach((panel, i) => {
+                    if (i === index) {
+                      panel.classList.add("active");
+                    } else {
+                      panel.classList.remove("active");
+                    }
+                  });
+              }
+            }
+          });
+
+          // Expand buttons
+          document.querySelectorAll(".expand-btn").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const target = e.target.dataset.target;
+              const isExpanded = e.target.dataset.expanded === "true";
+              const codeData = window.codeBlocks[target];
+              const codeContent = document.getElementById(target);
+              const pre = codeContent.querySelector("pre");
+              const code = pre.querySelector("code");
+
+              // Get the code text to display
+              const codeText = isExpanded
+                ? codeData.truncatedRaw
+                : codeData.fullRaw;
+
+              // Clear and reset the code element
+              code.className = "language-javascript";
+
+              // Use highlight.js to process the code and get highlighted HTML
+              const highlighted = hljs.highlight(codeText, {
+                language: "javascript",
+              });
+
+              // Set the highlighted HTML (which includes spans with hljs classes)
+              code.innerHTML = highlighted.value;
+
+              // Ensure hljs class is present
+              code.classList.add("hljs");
+
+              // Update button state
+              if (isExpanded) {
+                e.target.textContent = "Expand Code";
+                e.target.dataset.expanded = "false";
+              } else {
+                e.target.textContent = "Collapse Code";
+                e.target.dataset.expanded = "true";
               }
             });
           });
@@ -682,6 +2036,22 @@
       // Initialize documentation generator
       const generator = new DocumentationGenerator();
       generator.generate();
+
+      // Top bar toggle functionality (mobile)
+      const topBarToggle = document.getElementById("top-bar-toggle");
+      const topBar = document.getElementById("top-bar");
+
+      if (topBarToggle && topBar) {
+        topBarToggle.addEventListener("click", () => {
+          if (topBar.classList.contains("collapsed")) {
+            topBar.classList.remove("collapsed");
+            topBar.classList.add("expanded");
+          } else {
+            topBar.classList.remove("expanded");
+            topBar.classList.add("collapsed");
+          }
+        });
+      }
     </script>
   </body>
 </html>
