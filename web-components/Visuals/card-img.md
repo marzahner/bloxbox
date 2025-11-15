@@ -25,10 +25,10 @@
 
 Effects can be combined in any order:
 
-1. **Radial gradient**: Fades from outside edge (100% opacity) to 92% radius (0% opacity)
-2. **Normal gradient**: Linear gradient from bottom to top with 2 colors
-3. **Pattern**: Tiles an image/SVG on the background color
-4. **Tint**: Applies a color layer with blend mode "color" on top of the image
+- `Radial gradient`: Fades from outside edge (100% opacity) to 92% radius (0% opacity)
+- `Normal gradient`: Linear gradient from bottom to top with 2 colors
+- `Pattern`: Tiles an image/SVG on the background color
+- `Tint`: Applies a color layer with blend mode "color" on top of the image
 
 ```html
 <!-- Basic usage -->

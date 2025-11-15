@@ -24,14 +24,14 @@
       }
 
       :root {
-        --bg-primary: #0a0a0a;
-        --bg-secondary: #1a1a1a;
+        --bg-primary: #151516;
+        --bg-secondary: #1c1c1e;
         --bg-tertiary: #2a2a2a;
         --text-primary: #ffffff;
         --text-secondary: #a0a0a0;
         --accent: #050ff5;
         --accent-hover: #0408c7;
-        --border: #333;
+        --border: #2b2b2d;
         --code-bg: #1e1e1e;
       }
 
@@ -148,14 +148,19 @@
 
       /* Index.js Generator Section */
       #index-generator {
-        background: var(--bg-secondary);
-        border-bottom: 1px solid var(--border);
-        padding: 4rem 2rem;
+        max-width: 1200px;
+        margin-left: max(250px, calc((100% - 1200px) / 2));
+        margin-right: auto;
+        padding: 2rem 2rem;
+        transition: margin-left 0.3s ease;
       }
 
       .generator-container {
-        max-width: 1200px;
-        margin: 0 auto;
+        max-width: 100%;
+        padding: 3rem;
+        background: var(--bg-secondary);
+        border-radius: 12px;
+        border: 1px solid var(--border);
       }
 
       .generator-header {
@@ -182,9 +187,12 @@
 
       .generator-subtitle {
         font-size: 1.25rem;
-        font-weight: 400;
-        color: var(--text-secondary);
+        color: #ebebeb;
         margin: 0;
+        margin-top: 20px;
+        font-family: "SF Mono", SFMono-Regular, ui-monospace, "DejaVu Sans Mono",
+          Menlo, Consolas, monospace;
+        font-weight: 600;
       }
 
       .generator-description {
@@ -338,13 +346,19 @@
 
       @media (max-width: 1080px) {
         #index-generator {
-          margin-left: 0;
+          margin-left: auto;
+          margin-right: auto;
+          padding: 4rem 2rem 2rem 2rem;
         }
       }
 
       @media (max-width: 768px) {
         #index-generator {
-          padding: 2rem 1rem;
+          padding: 4rem 1rem 2rem 1rem;
+        }
+
+        .generator-container {
+          padding: 2rem 1.5rem;
         }
 
         .generator-title {
@@ -461,11 +475,11 @@
         left: 0;
         width: 250px;
         height: 100vh;
-        background: var(--bg-secondary);
-        border-right: 1px solid var(--border);
         padding: 2rem 1.5rem;
         overflow-y: auto;
         z-index: 999;
+        background: var(--bg-secondary);
+        border-right: 1px solid var(--border);
       }
 
       #sidebar h3 {
@@ -521,29 +535,12 @@
         color: var(--text-primary);
       }
 
-      #sidebar::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      #sidebar::-webkit-scrollbar-track {
-        background: var(--bg-secondary);
-      }
-
-      #sidebar::-webkit-scrollbar-thumb {
-        background: var(--border);
-        border-radius: 4px;
-      }
-
-      #sidebar::-webkit-scrollbar-thumb:hover {
-        background: var(--accent);
-      }
-
       /* Documentation Sections */
       #documentation {
         max-width: 1200px;
-        margin: 0 auto;
+        margin-left: max(250px, calc((100% - 1200px) / 2));
+        margin-right: auto;
         padding: 4rem 2rem;
-        margin-left: 250px;
         transition: margin-left 0.3s ease;
       }
 
@@ -576,18 +573,33 @@
       }
 
       .component-section strong {
-        color: var(--accent);
+        color: #ffffff;
+        font-family: "SF Mono", SFMono-Regular, ui-monospace, "DejaVu Sans Mono",
+          Menlo, Consolas, monospace;
         font-weight: 600;
       }
 
       .component-section ul {
         margin-bottom: 2rem;
-        padding-left: 1.5rem;
+        padding-left: 0;
+        list-style-type: none;
+        list-style: none;
       }
 
       .component-section li {
-        padding: 0.5rem 0;
+        padding: 0.5rem 0 0.5rem 1.5rem;
         color: var(--text-secondary);
+        position: relative;
+        list-style: none;
+      }
+
+      .component-section li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--text-secondary);
+        font-size: 1.2em;
+        font-weight: bold;
       }
 
       .component-section li strong {
@@ -601,7 +613,6 @@
         border: 1px solid var(--border);
         border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
       }
 
       .example-header {
@@ -630,9 +641,9 @@
 
       .example-tab {
         padding: 0.5rem 1rem;
-        background: var(--bg-tertiary);
-        border: 1px solid var(--border);
-        color: var(--text-secondary);
+        background: #303030;
+        border: 1px solid #474747;
+        color: #dfdfdf;
         cursor: pointer;
         border-radius: 6px;
         font-size: 0.875rem;
@@ -640,15 +651,11 @@
         transition: all 0.2s ease;
       }
 
-      .example-tab:hover {
-        background: var(--bg-primary);
-        border-color: var(--accent);
-      }
-
       .example-tab.active {
-        background: var(--accent);
-        color: var(--text-primary);
-        border-color: var(--accent);
+        background: #020de4;
+        color: #ebebeb;
+        border-color: #4149ee;
+        font-weight: 500;
       }
 
       .example-content-wrapper {
@@ -667,14 +674,7 @@
       }
 
       .example-preview {
-        background: repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 10px,
-            rgba(255, 255, 255, 0.01) 10px,
-            rgba(255, 255, 255, 0.01) 20px
-          ),
-          var(--bg-primary);
+        background: var(--bg-primary);
         padding: 2.5rem;
         display: flex;
         align-items: center;
@@ -686,14 +686,7 @@
       }
 
       .example-preview.light {
-        background: repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 10px,
-            rgba(0, 0, 0, 0.01) 10px,
-            rgba(0, 0, 0, 0.01) 20px
-          ),
-          #ffffff;
+        background: #ffffff;
       }
 
       .preview-toggle {
@@ -702,13 +695,15 @@
         right: 1rem;
         background: var(--bg-tertiary);
         border: 1px solid var(--border);
-        color: var(--text-primary);
-        padding: 0.5rem 0.75rem;
+        color: var(--text-secondary);
+        padding: 0.5rem;
         border-radius: 4px;
         cursor: pointer;
-        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         z-index: 10;
-        transition: all 0.2s ease;
+        transition: all 0.15s ease-out;
       }
 
       .preview-toggle:hover {
@@ -849,6 +844,9 @@
         cursor: pointer;
         font-size: 0.85rem;
         transition: all 0.2s;
+        display: block;
+        margin: 1rem auto 0 auto;
+        width: fit-content;
       }
 
       .expand-btn:hover {
@@ -859,6 +857,15 @@
       .code-content {
         padding: 1.5rem;
         overflow-x: auto;
+        position: relative;
+      }
+
+      .code-content.clickable-code {
+        cursor: pointer;
+      }
+
+      .code-content.clickable-code:hover {
+        background: rgba(255, 255, 255, 0.02);
       }
 
       .code-content pre {
@@ -1140,23 +1147,6 @@
       }
 
       /* Scrollbar */
-      ::-webkit-scrollbar {
-        width: 10px;
-        height: 10px;
-      }
-
-      ::-webkit-scrollbar-track {
-        background: var(--bg-secondary);
-      }
-
-      ::-webkit-scrollbar-thumb {
-        background: var(--border);
-        border-radius: 5px;
-      }
-
-      ::-webkit-scrollbar-thumb:hover {
-        background: var(--accent);
-      }
 
       @media (max-width: 1080px) {
         #sidebar {
@@ -1168,7 +1158,8 @@
         }
 
         #documentation {
-          margin-left: 0;
+          margin-left: auto;
+          margin-right: auto;
           padding: 4rem 2rem 2rem 2rem;
         }
       }
@@ -1268,34 +1259,26 @@
         </p>
         <div class="component-selector">
           <div class="selector-row">
-            <button class="component-btn active" data-component="all">
-              all
-            </button>
-            <button class="component-btn active" data-component="icon-svg">
+            <button class="component-btn" data-component="all">all</button>
+            <button class="component-btn" data-component="icon-svg">
               &lt;icon-svg&gt;
             </button>
-            <button class="component-btn active" data-component="h-stack">
+            <button class="component-btn" data-component="h-stack">
               &lt;h-stack&gt;
             </button>
-            <button
-              class="component-btn active"
-              data-component="h-stack_responsive"
-            >
+            <button class="component-btn" data-component="h-stack_responsive">
               &lt;h-stack-responsive&gt;
             </button>
-            <button class="component-btn active" data-component="v-stack">
+            <button class="component-btn" data-component="v-stack">
               &lt;v-stack&gt;
             </button>
-            <button
-              class="component-btn active"
-              data-component="v-stack_responsive"
-            >
+            <button class="component-btn" data-component="v-stack_responsive">
               &lt;v-stack-responsive&gt;
             </button>
-            <button class="component-btn active" data-component="polaroid-img">
+            <button class="component-btn" data-component="polaroid-img">
               &lt;polaroid-img&gt;
             </button>
-            <button class="component-btn active" data-component="card-img">
+            <button class="component-btn" data-component="card-img">
               &lt;card-img&gt;
             </button>
           </div>
@@ -1729,7 +1712,12 @@
           html += '<div class="code-display">\n';
           html += '<div class="code-header">\n';
           html += '<span class="code-language">HTML</span>\n';
-          html += `<button class="copy-btn" data-copy-type="html" data-target="${id}">Copy Code</button>\n`;
+          html += `<button class="copy-code-btn" data-copy-type="html" data-target="${id}" title="Copy code">\n`;
+          html += `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">\n`;
+          html += `<path d="M4 2C3.44772 2 3 2.44772 3 3V13C3 13.5523 3.44772 14 4 14H12C12.5523 14 13 13.5523 13 13V5.41421C13 5.149 12.8946 4.89464 12.7071 4.70711L10.2929 2.29289C10.1054 2.10536 9.851 2 9.58579 2H4Z" stroke="currentColor" stroke-width="1.5" fill="none"/>\n`;
+          html += `<path d="M13 5H10C9.44772 5 9 4.55228 9 4V1" stroke="currentColor" stroke-width="1.5" fill="none"/>\n`;
+          html += `</svg>\n`;
+          html += `</button>\n`;
           html += "</div>\n";
           html += `<div class="code-content" id="${id}">\n`;
 
@@ -1796,14 +1784,27 @@
           html += '<span class="code-language">JavaScript</span>\n';
           html +=
             '<div style="display: flex; gap: 0.5rem; align-items: center;">\n';
+          html += `<button class="download-code-btn" data-download-type="js" data-target="${id}" title="Download file">\n`;
+          html += `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">\n`;
+          html += `<path d="M8 2V10M8 10L5 7M8 10L11 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>\n`;
+          html += `<path d="M2 12V13C2 13.5523 2.44772 14 3 14H13C13.5523 14 14 13.5523 14 13V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>\n`;
+          html += `</svg>\n`;
+          html += `</button>\n`;
+          html += `<button class="copy-code-btn" data-copy-type="js" data-target="${id}" title="Copy code">\n`;
+          html += `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">\n`;
+          html += `<path d="M4 2C3.44772 2 3 2.44772 3 3V13C3 13.5523 3.44772 14 4 14H12C12.5523 14 13 13.5523 13 13V5.41421C13 5.149 12.8946 4.89464 12.7071 4.70711L10.2929 2.29289C10.1054 2.10536 9.851 2 9.58579 2H4Z" stroke="currentColor" stroke-width="1.5" fill="none"/>\n`;
+          html += `<path d="M13 5H10C9.44772 5 9 4.55228 9 4V1" stroke="currentColor" stroke-width="1.5" fill="none"/>\n`;
+          html += `</svg>\n`;
+          html += `</button>\n`;
+          html += "</div>\n";
+          html += "</div>\n";
+          html += `<div class="code-content${
+            isLongCode ? " clickable-code" : ""
+          }" id="${id}" data-target="${id}" data-expanded="false">\n`;
+          html += `<pre><code class="language-javascript">${escapedTruncatedCode}</code></pre>\n`;
           if (isLongCode) {
             html += `<button class="expand-btn" data-target="${id}" data-expanded="false">Expand Code</button>\n`;
           }
-          html += `<button class="copy-btn" data-copy-type="js" data-target="${id}">Copy Code</button>\n`;
-          html += "</div>\n";
-          html += "</div>\n";
-          html += `<div class="code-content" id="${id}">\n`;
-          html += `<pre><code class="language-javascript">${escapedTruncatedCode}</code></pre>\n`;
           html += "</div>\n";
           html += "</div>\n";
           html += "</div>\n";
@@ -1868,7 +1869,12 @@
           }
 
           // Copy button
-          html += `<button class="copy-btn" data-copy-type="html" data-target="${unifiedId}">Copy</button>\n`;
+          html += `<button class="copy-code-btn" data-copy-type="html" data-target="${unifiedId}" title="Copy code">\n`;
+          html += `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">\n`;
+          html += `<path d="M4 2C3.44772 2 3 2.44772 3 3V13C3 13.5523 3.44772 14 4 14H12C12.5523 14 13 13.5523 13 13V5.41421C13 5.149 12.8946 4.89464 12.7071 4.70711L10.2929 2.29289C10.1054 2.10536 9.851 2 9.58579 2H4Z" stroke="currentColor" stroke-width="1.5" fill="none"/>\n`;
+          html += `<path d="M13 5H10C9.44772 5 9 4.55228 9 4V1" stroke="currentColor" stroke-width="1.5" fill="none"/>\n`;
+          html += `</svg>\n`;
+          html += `</button>\n`;
           html += "</div>\n"; // end example-header
 
           // Unified content area with preview and code side-by-side
@@ -1882,7 +1888,15 @@
             // Preview section
             html += '<div class="example-preview">\n';
             html +=
-              '<button class="preview-toggle" title="Toggle light/dark preview">🌓</button>\n';
+              '<button class="preview-toggle" title="Toggle light/dark preview">\n';
+            html +=
+              '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">\n';
+            html +=
+              '<circle cx="8" cy="8" r="3.5" stroke="currentColor" stroke-width="1.5" fill="none"/>\n';
+            html +=
+              '<path d="M8 1V3M8 13V15M15 8H13M3 8H1M13.5 2.5L12.5 3.5M3.5 3.5L2.5 2.5M13.5 13.5L12.5 12.5M3.5 12.5L2.5 13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>\n';
+            html += "</svg>\n";
+            html += "</button>\n";
             html += `<div class="preview-content" data-preview-index="${index}"></div>\n`;
             html += "</div>\n";
 
@@ -2356,48 +2370,104 @@
             });
           });
 
-          // Copy buttons
-          document.querySelectorAll(".copy-btn").forEach((btn) => {
-            btn.addEventListener("click", async (e) => {
-              const target = e.target.dataset.target;
-              const copyType = e.target.dataset.copyType;
+          // Copy buttons (both .copy-btn and .copy-code-btn)
+          document
+            .querySelectorAll(".copy-btn, .copy-code-btn")
+            .forEach((btn) => {
+              btn.addEventListener("click", async (e) => {
+                const target =
+                  e.target.closest("[data-target]")?.dataset.target ||
+                  e.target.dataset.target;
+                const copyType =
+                  e.target.closest("[data-copy-type]")?.dataset.copyType ||
+                  e.target.dataset.copyType;
 
-              let textToCopy = "";
+                if (!target || !copyType) return;
 
-              if (copyType === "html") {
-                const codeBlocks = window.codeBlocks[target];
-                if (!codeBlocks) return;
+                let textToCopy = "";
 
-                // Find active panel index
-                const wrapper = document.getElementById(target);
-                if (!wrapper) return;
+                if (copyType === "html") {
+                  const codeBlocks = window.codeBlocks[target];
+                  if (!codeBlocks) return;
 
-                const activePanel = wrapper.querySelector(
-                  ".example-panel.active"
-                );
-                if (!activePanel) return;
+                  // Find active panel index
+                  const wrapper = document.getElementById(target);
+                  if (!wrapper) return;
 
-                const activeIndex = parseInt(activePanel.dataset.exampleIndex);
-                textToCopy = codeBlocks[activeIndex].code;
-              } else if (copyType === "js") {
-                const codeData = window.codeBlocks[target];
-                textToCopy = codeData.copy;
-              }
+                  const activePanel = wrapper.querySelector(
+                    ".example-panel.active"
+                  );
+                  if (!activePanel) return;
 
-              try {
-                await navigator.clipboard.writeText(textToCopy);
-                e.target.textContent = "Copied!";
-                e.target.classList.add("copied");
+                  const activeIndex = parseInt(
+                    activePanel.dataset.exampleIndex
+                  );
+                  textToCopy = codeBlocks[activeIndex].code;
+                } else if (copyType === "js") {
+                  const codeData = window.codeBlocks[target];
+                  textToCopy = codeData.copy;
+                }
 
-                setTimeout(() => {
-                  e.target.textContent = "Copy";
-                  e.target.classList.remove("copied");
-                }, 2000);
-              } catch (err) {
-                console.error("Failed to copy:", err);
-              }
+                try {
+                  await navigator.clipboard.writeText(textToCopy);
+                  const button = e.target.closest("button") || e.target;
+                  if (button.classList.contains("copy-btn")) {
+                    button.textContent = "Copied!";
+                  }
+                  button.classList.add("copied");
+
+                  setTimeout(() => {
+                    if (button.classList.contains("copy-btn")) {
+                      button.textContent = "Copy";
+                    }
+                    button.classList.remove("copied");
+                  }, 2000);
+                } catch (err) {
+                  console.error("Failed to copy:", err);
+                }
+              });
             });
-          });
+
+          // Download buttons for JS code blocks
+          document
+            .querySelectorAll(".download-code-btn[data-download-type='js']")
+            .forEach((btn) => {
+              btn.addEventListener("click", async (e) => {
+                const target =
+                  e.target.closest("[data-target]")?.dataset.target ||
+                  e.target.dataset.target;
+                if (!target) return;
+
+                const codeData = window.codeBlocks[target];
+                if (!codeData) return;
+
+                // Find parent component section to get component name
+                const codeContainer = document.getElementById(target);
+                const componentSection =
+                  codeContainer?.closest(".component-section");
+                const componentId = componentSection?.id || "component";
+
+                // Use component ID as filename (e.g., "h-stack" -> "h-stack.js")
+                const filename = `${componentId}.js`;
+
+                try {
+                  const codeText = codeData.copy;
+                  const blob = new Blob([codeText], {
+                    type: "text/javascript",
+                  });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = filename;
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                  URL.revokeObjectURL(url);
+                } catch (err) {
+                  console.error("Failed to download:", err);
+                }
+              });
+            });
 
           // Unified example tab switching (using event delegation)
           document.addEventListener("click", (e) => {
@@ -2429,45 +2499,68 @@
             }
           });
 
+          // Expand functionality - handle both button clicks and code area clicks
+          const handleExpand = (target, isExpanded) => {
+            const codeData = window.codeBlocks[target];
+            const codeContent = document.getElementById(target);
+            const pre = codeContent.querySelector("pre");
+            const code = pre.querySelector("code");
+            const expandBtn = codeContent.querySelector(".expand-btn");
+
+            // Get the code text to display
+            const codeText = isExpanded
+              ? codeData.truncatedRaw
+              : codeData.fullRaw;
+
+            // Clear and reset the code element
+            code.className = "language-javascript";
+
+            // Use highlight.js to process the code and get highlighted HTML
+            const highlighted = hljs.highlight(codeText, {
+              language: "javascript",
+            });
+
+            // Set the highlighted HTML (which includes spans with hljs classes)
+            code.innerHTML = highlighted.value;
+
+            // Ensure hljs class is present
+            code.classList.add("hljs");
+
+            // Update button state
+            const newExpandedState = !isExpanded;
+            if (expandBtn) {
+              expandBtn.textContent = newExpandedState
+                ? "Collapse Code"
+                : "Expand Code";
+              expandBtn.dataset.expanded = newExpandedState.toString();
+            }
+            codeContent.dataset.expanded = newExpandedState.toString();
+          };
+
           // Expand buttons
           document.querySelectorAll(".expand-btn").forEach((btn) => {
             btn.addEventListener("click", (e) => {
+              e.stopPropagation();
               const target = e.target.dataset.target;
               const isExpanded = e.target.dataset.expanded === "true";
-              const codeData = window.codeBlocks[target];
-              const codeContent = document.getElementById(target);
-              const pre = codeContent.querySelector("pre");
-              const code = pre.querySelector("code");
-
-              // Get the code text to display
-              const codeText = isExpanded
-                ? codeData.truncatedRaw
-                : codeData.fullRaw;
-
-              // Clear and reset the code element
-              code.className = "language-javascript";
-
-              // Use highlight.js to process the code and get highlighted HTML
-              const highlighted = hljs.highlight(codeText, {
-                language: "javascript",
-              });
-
-              // Set the highlighted HTML (which includes spans with hljs classes)
-              code.innerHTML = highlighted.value;
-
-              // Ensure hljs class is present
-              code.classList.add("hljs");
-
-              // Update button state
-              if (isExpanded) {
-                e.target.textContent = "Expand Code";
-                e.target.dataset.expanded = "false";
-              } else {
-                e.target.textContent = "Collapse Code";
-                e.target.dataset.expanded = "true";
-              }
+              handleExpand(target, isExpanded);
             });
           });
+
+          // Make code content area clickable
+          document
+            .querySelectorAll(".code-content.clickable-code")
+            .forEach((codeContent) => {
+              codeContent.addEventListener("click", (e) => {
+                // Don't trigger if clicking the button itself
+                if (e.target.classList.contains("expand-btn")) {
+                  return;
+                }
+                const target = codeContent.id;
+                const isExpanded = codeContent.dataset.expanded === "true";
+                handleExpand(target, isExpanded);
+              });
+            });
         }
       }
 
@@ -2487,7 +2580,7 @@
       };
 
       const allComponents = Object.keys(componentMap);
-      let selectedComponents = new Set(allComponents);
+      let selectedComponents = new Set();
 
       function getImportPath(component) {
         const pathInput = document.getElementById("import-path-input");
