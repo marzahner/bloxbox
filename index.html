@@ -8,6 +8,10 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <!-- Import components early to ensure they're registered -->
@@ -677,6 +681,50 @@
         justify-content: center;
         min-height: 200px;
         border-right: 1px solid var(--border);
+        position: relative;
+        transition: background 0.4s ease-in-out;
+      }
+
+      .example-preview.light {
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(0, 0, 0, 0.01) 10px,
+            rgba(0, 0, 0, 0.01) 20px
+          ),
+          #ffffff;
+      }
+
+      .preview-toggle {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border);
+        color: var(--text-primary);
+        padding: 0.5rem 0.75rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        z-index: 10;
+        transition: all 0.2s ease;
+      }
+
+      .preview-toggle:hover {
+        background: var(--bg-secondary);
+        border-color: var(--accent);
+      }
+
+      .example-preview.light .preview-toggle {
+        background: #f0f0f0;
+        border-color: #ddd;
+        color: #000;
+      }
+
+      .example-preview.light .preview-toggle:hover {
+        background: #e0e0e0;
+        border-color: #999;
       }
 
       .example-preview .preview-content {
@@ -1247,6 +1295,9 @@
             <button class="component-btn active" data-component="polaroid-img">
               &lt;polaroid-img&gt;
             </button>
+            <button class="component-btn active" data-component="card-img">
+              &lt;card-img&gt;
+            </button>
           </div>
         </div>
         <div class="path-input-container">
@@ -1433,6 +1484,11 @@
               path: "Visuals/polaroid-img.md",
               category: "Visuals",
               filename: "polaroid-img.md",
+            },
+            {
+              path: "Visuals/card-img.md",
+              category: "Visuals",
+              filename: "card-img.md",
             },
           ];
 
@@ -1825,6 +1881,8 @@
 
             // Preview section
             html += '<div class="example-preview">\n';
+            html +=
+              '<button class="preview-toggle" title="Toggle light/dark preview">🌓</button>\n';
             html += `<div class="preview-content" data-preview-index="${index}"></div>\n`;
             html += "</div>\n";
 
@@ -2059,6 +2117,7 @@
             const hStackDefined = customElements.get("h-stack");
             const iconSvgDefined = customElements.get("icon-svg");
             const polaroidDefined = customElements.get("polaroid-img");
+            const cardImgDefined = customElements.get("card-img");
 
             // If none are defined yet, keep trying (but don't wait forever)
             // After a few attempts, render anyway - components might upgrade later
@@ -2066,6 +2125,7 @@
               !hStackDefined &&
               !iconSvgDefined &&
               !polaroidDefined &&
+              !cardImgDefined &&
               attempts < 10
             ) {
               setTimeout(tryRender, 50);
@@ -2090,8 +2150,13 @@
               }
 
               blocks.forEach((block, index) => {
-                const previewContent = wrapper.querySelector(
-                  `.example-panel[data-example-index="${index}"] .preview-content[data-preview-index="${index}"]`
+                const previewPanel = wrapper.querySelector(
+                  `.example-panel[data-example-index="${index}"]`
+                );
+                if (!previewPanel) return;
+
+                const previewContent = previewPanel.querySelector(
+                  `.preview-content[data-preview-index="${index}"]`
                 );
                 if (!previewContent) return;
 
@@ -2110,6 +2175,23 @@
                 }
 
                 previewContent.innerHTML = block.code;
+
+                // Add toggle functionality on hover over the toggle button
+                const previewSection =
+                  previewPanel.querySelector(".example-preview");
+                if (previewSection) {
+                  const toggleBtn =
+                    previewSection.querySelector(".preview-toggle");
+                  if (toggleBtn && !toggleBtn.dataset.listenerAdded) {
+                    toggleBtn.dataset.listenerAdded = "true";
+                    toggleBtn.addEventListener("mouseenter", () => {
+                      previewSection.classList.add("light");
+                    });
+                    toggleBtn.addEventListener("mouseleave", () => {
+                      previewSection.classList.remove("light");
+                    });
+                  }
+                }
 
                 // Force a reflow to ensure custom elements are upgraded
                 void previewContent.offsetHeight;
@@ -2401,6 +2483,7 @@
         "v-stack": "./js-components/v-stack.js",
         "v-stack_responsive": "./js-components/v-stack_responsive.js",
         "polaroid-img": "./js-components/polaroid-img.js",
+        "card-img": "./js-components/card-img.js",
       };
 
       const allComponents = Object.keys(componentMap);
