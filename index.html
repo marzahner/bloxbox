@@ -1244,6 +1244,9 @@
             >
               &lt;v-stack-responsive&gt;
             </button>
+            <button class="component-btn active" data-component="polaroid-img">
+              &lt;polaroid-img&gt;
+            </button>
           </div>
         </div>
         <div class="path-input-container">
@@ -1426,14 +1429,30 @@
               category: "Visuals",
               filename: "icon-svg.md",
             },
+            {
+              path: "Visuals/polaroid-img.md",
+              category: "Visuals",
+              filename: "polaroid-img.md",
+            },
           ];
 
           return fileManifest;
         }
 
         async fetchMarkdownFile(filePath) {
-          const response = await fetch(`${this.componentsFolder}${filePath}`);
-          return await response.text();
+          try {
+            const response = await fetch(`${this.componentsFolder}${filePath}`);
+            if (!response.ok) {
+              console.error(
+                `Failed to fetch ${filePath}: ${response.status} ${response.statusText}`
+              );
+              return "";
+            }
+            return await response.text();
+          } catch (error) {
+            console.error(`Error fetching ${filePath}:`, error);
+            return "";
+          }
         }
 
         parseMarkdown(markdown) {
@@ -1553,14 +1572,17 @@
             ) {
               i++; // Skip the ``` html line
 
-              // Get the comment line (title)
-              const commentLine = lines[i].trim();
+              // Get the comment line (title) - check if it's a comment
+              const commentLine = lines[i] ? lines[i].trim() : "";
               const titleMatch = commentLine.match(
                 new RegExp("<!--\\s*(.+?)\\s*-->")
               );
               const title = titleMatch ? titleMatch[1] : "Example";
 
-              i++; // Skip the comment line
+              // Only skip the line if it was actually a comment
+              if (titleMatch) {
+                i++; // Skip the comment line
+              }
 
               // Collect code until closing ```
               let code = "";
@@ -1680,10 +1702,18 @@
           // Check for 4 backticks first (since ```` also starts with ```)
           while (i < lines.length) {
             const trimmed = lines[i].trim();
-            if (trimmed.startsWith("````") || trimmed === "````") {
+            // Check for 4 backticks first (exact match or starts with 4 backticks)
+            if (
+              trimmed === "````" ||
+              (trimmed.startsWith("````") && trimmed.length >= 4)
+            ) {
               break; // Found closing 4 backticks
             }
-            if (trimmed.startsWith("```") || trimmed === "```") {
+            // Check for 3 backticks (but not 4)
+            if (
+              trimmed === "```" ||
+              (trimmed.startsWith("```") && !trimmed.startsWith("````"))
+            ) {
               break; // Found closing 3 backticks
             }
             fullCode += lines[i] + "\n";
@@ -1860,63 +1890,74 @@
 
           // Generate sections with HTML code blocks per file
           for (const file of files) {
-            const markdown = await this.fetchMarkdownFile(file.path);
-            const componentName = this.extractComponentName(markdown);
-            const componentId = componentName
-              ? this.createIdFromName(this.extractTagNameForId(componentName))
-              : `component-${files.indexOf(file)}`;
+            try {
+              const markdown = await this.fetchMarkdownFile(file.path);
+              const componentName = this.extractComponentName(markdown);
+              const componentId = componentName
+                ? this.createIdFromName(this.extractTagNameForId(componentName))
+                : `component-${files.indexOf(file)}`;
 
-            const html = this.parseMarkdown(markdown);
-            const htmlCodeBlocks = this.collectAllHTMLCodeBlocks(markdown);
+              const html = this.parseMarkdown(markdown);
+              const htmlCodeBlocks = this.collectAllHTMLCodeBlocks(markdown);
 
-            const section = document.createElement("div");
-            section.className = "component-section";
-            section.id = componentId;
-            section.innerHTML = html;
+              if (!html || html.trim() === "") {
+                continue;
+              }
 
-            // Insert unified example section above JS code
-            if (htmlCodeBlocks.length > 0) {
-              const baseId = `${Date.now()}-${Math.random()
-                .toString(36)
-                .substr(2, 9)}`;
-              const unifiedHtml = this.createUnifiedExampleSection(
-                htmlCodeBlocks,
-                baseId
-              );
+              const section = document.createElement("div");
+              section.className = "component-section";
+              section.id = componentId;
+              section.innerHTML = html;
 
-              // Find the JS code block container by looking for JavaScript language label
-              const codeContainers = section.querySelectorAll(
-                ".code-block-container"
-              );
-              let jsContainer = null;
-              codeContainers.forEach((container) => {
-                const langSpan = container.querySelector(".code-language");
-                if (langSpan && langSpan.textContent.trim() === "JavaScript") {
-                  jsContainer = container;
+              // Insert unified example section above JS code
+              if (htmlCodeBlocks.length > 0) {
+                const baseId = `${Date.now()}-${Math.random()
+                  .toString(36)
+                  .substr(2, 9)}`;
+                const unifiedHtml = this.createUnifiedExampleSection(
+                  htmlCodeBlocks,
+                  baseId
+                );
+
+                // Find the JS code block container by looking for JavaScript language label
+                const codeContainers = section.querySelectorAll(
+                  ".code-block-container"
+                );
+                let jsContainer = null;
+                codeContainers.forEach((container) => {
+                  const langSpan = container.querySelector(".code-language");
+                  if (
+                    langSpan &&
+                    langSpan.textContent.trim() === "JavaScript"
+                  ) {
+                    jsContainer = container;
+                  }
+                });
+
+                // Insert unified example section
+                const tempDiv = document.createElement("div");
+                tempDiv.innerHTML = unifiedHtml;
+                if (jsContainer) {
+                  section.insertBefore(tempDiv.firstElementChild, jsContainer);
+                } else {
+                  section.appendChild(tempDiv.firstElementChild);
                 }
-              });
-
-              // Insert unified example section
-              const tempDiv = document.createElement("div");
-              tempDiv.innerHTML = unifiedHtml;
-              if (jsContainer) {
-                section.insertBefore(tempDiv.firstElementChild, jsContainer);
-              } else {
-                section.appendChild(tempDiv.firstElementChild);
               }
-            }
 
-            documentation.appendChild(section);
+              documentation.appendChild(section);
 
-            // Store component info grouped by category
-            if (componentName) {
-              if (!componentsByCategory[file.category]) {
-                componentsByCategory[file.category] = [];
+              // Store component info grouped by category
+              if (componentName) {
+                if (!componentsByCategory[file.category]) {
+                  componentsByCategory[file.category] = [];
+                }
+                componentsByCategory[file.category].push({
+                  name: componentName,
+                  id: componentId,
+                });
               }
-              componentsByCategory[file.category].push({
-                name: componentName,
-                id: componentId,
-              });
+            } catch (error) {
+              console.error(`Error processing ${file.path}:`, error);
             }
           }
 
@@ -2017,10 +2058,16 @@
             // Don't require both - some previews might only use one component
             const hStackDefined = customElements.get("h-stack");
             const iconSvgDefined = customElements.get("icon-svg");
+            const polaroidDefined = customElements.get("polaroid-img");
 
-            // If neither is defined yet, keep trying (but don't wait forever)
+            // If none are defined yet, keep trying (but don't wait forever)
             // After a few attempts, render anyway - components might upgrade later
-            if (!hStackDefined && !iconSvgDefined && attempts < 10) {
+            if (
+              !hStackDefined &&
+              !iconSvgDefined &&
+              !polaroidDefined &&
+              attempts < 10
+            ) {
               setTimeout(tryRender, 50);
               return;
             }
@@ -2353,6 +2400,7 @@
         "h-stack_responsive": "./js-components/h-stack_responsive.js",
         "v-stack": "./js-components/v-stack.js",
         "v-stack_responsive": "./js-components/v-stack_responsive.js",
+        "polaroid-img": "./js-components/polaroid-img.js",
       };
 
       const allComponents = Object.keys(componentMap);

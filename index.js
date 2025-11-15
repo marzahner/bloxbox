@@ -12,9 +12,12 @@
  * - <h-stack-responsive> - Responsive horizontal stack
  * - <v-stack-responsive> - Responsive vertical stack
  * - <icon-svg> - SVG icon loader
+ * - <polaroid-img> - Image container with customizable background and effects
  */
 
 import "./js-components/h-stack.js";
 import "./js-components/h-stack_responsive.js";
+import "./js-components/v-stack.js";
 import "./js-components/v-stack_responsive.js";
 import "./js-components/icon-svg.js";
+import "./js-components/polaroid-img.js";
