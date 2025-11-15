@@ -9,6 +9,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <!-- Import components early to ensure they're registered -->
     <script type="module" src="./index.js"></script>
     <style>
@@ -138,6 +139,221 @@
           transform: translate3d(0, -50%, 0) scale3d(1, 1, 1)
             rotate3d(0, 0, 1, 0deg);
           opacity: 1;
+        }
+      }
+
+      /* Index.js Generator Section */
+      #index-generator {
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border);
+        padding: 4rem 2rem;
+      }
+
+      .generator-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .generator-header {
+        margin-bottom: 1.5rem;
+      }
+
+      .generator-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .generator-icon {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background: var(--accent);
+        flex-shrink: 0;
+      }
+
+      .generator-subtitle {
+        font-size: 1.25rem;
+        font-weight: 400;
+        color: var(--text-secondary);
+        margin: 0;
+      }
+
+      .generator-description {
+        font-size: 1rem;
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+        line-height: 1.6;
+      }
+
+      .component-selector {
+        margin-bottom: 2rem;
+      }
+
+      .path-input-container {
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .path-input-label {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .path-input {
+        flex: 1;
+        min-width: 200px;
+        padding: 0.5rem 1rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border);
+        color: var(--text-primary);
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+        transition: all 0.2s ease;
+      }
+
+      .path-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        background: var(--bg-primary);
+      }
+
+      .path-input::placeholder {
+        color: var(--text-secondary);
+      }
+
+      .selector-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .component-btn {
+        padding: 0.5rem 1rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border);
+        color: var(--text-secondary);
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: inherit;
+      }
+
+      .component-btn:hover {
+        background: var(--bg-primary);
+        border-color: var(--accent);
+        color: var(--text-primary);
+      }
+
+      .component-btn.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--text-primary);
+      }
+
+      .code-generator {
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .code-generator-header {
+        display: flex;
+        justify-content: flex-end;
+        padding: 0.75rem 1rem;
+        background: var(--bg-tertiary);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .code-generator-actions {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+
+      .copy-code-btn,
+      .download-code-btn {
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+      }
+
+      .copy-code-btn:hover,
+      .download-code-btn:hover {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+      }
+
+      .copy-code-btn.copied {
+        color: #10b981;
+      }
+
+      .download-code-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .code-generator-content {
+        padding: 1.5rem;
+        overflow-x: auto;
+      }
+
+      .code-generator-content pre {
+        margin: 0;
+        background: transparent !important;
+        padding: 0 !important;
+      }
+
+      .code-generator-content code {
+        font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+        font-size: 0.875rem;
+        line-height: 1.6;
+        background: transparent !important;
+        color: #d4d4d4;
+      }
+
+      @media (max-width: 1080px) {
+        #index-generator {
+          margin-left: 0;
+        }
+      }
+
+      @media (max-width: 768px) {
+        #index-generator {
+          padding: 2rem 1rem;
+        }
+
+        .generator-title {
+          font-size: 1.5rem;
+        }
+
+        .generator-subtitle {
+          font-size: 1rem;
+        }
+
+        .component-btn {
+          font-size: 0.8125rem;
+          padding: 0.5rem 0.875rem;
         }
       }
 
@@ -985,6 +1201,129 @@
       <div class="hero-content">
         <h1 class="hero-title">bloxbox</h1>
         <p class="hero-subtitle">Web Components Library</p>
+      </div>
+    </section>
+
+    <!-- Index.js Generator Section -->
+    <section id="index-generator">
+      <div class="generator-container">
+        <div class="generator-header">
+          <h2 class="generator-title">
+            <span class="generator-icon"></span>
+            bloxbox documentation
+          </h2>
+          <h3 class="generator-subtitle">index.js</h3>
+        </div>
+        <p class="generator-description">
+          index.js lets you bundle components so you don't have to import each
+          one at a time. Simply select the desired web-components and export.
+        </p>
+        <div class="component-selector">
+          <div class="selector-row">
+            <button class="component-btn active" data-component="all">
+              all
+            </button>
+            <button class="component-btn active" data-component="icon-svg">
+              &lt;icon-svg&gt;
+            </button>
+            <button class="component-btn active" data-component="h-stack">
+              &lt;h-stack&gt;
+            </button>
+            <button
+              class="component-btn active"
+              data-component="h-stack_responsive"
+            >
+              &lt;h-stack-responsive&gt;
+            </button>
+            <button class="component-btn active" data-component="v-stack">
+              &lt;v-stack&gt;
+            </button>
+            <button
+              class="component-btn active"
+              data-component="v-stack_responsive"
+            >
+              &lt;v-stack-responsive&gt;
+            </button>
+          </div>
+        </div>
+        <div class="path-input-container">
+          <label for="import-path-input" class="path-input-label"
+            >Import Path:</label
+          >
+          <input
+            type="text"
+            id="import-path-input"
+            class="path-input"
+            placeholder="./js-components/"
+            value="./js-components/"
+          />
+        </div>
+        <div class="code-generator">
+          <div class="code-generator-header">
+            <div class="code-generator-actions">
+              <button
+                class="download-code-btn"
+                id="download-files"
+                title="Download files"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 2V10M8 10L5 7M8 10L11 7"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    fill="none"
+                  />
+                  <path
+                    d="M2 12V13C2 13.5523 2.44772 14 3 14H13C13.5523 14 14 13.5523 14 13V12"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    fill="none"
+                  />
+                </svg>
+              </button>
+              <button
+                class="copy-code-btn"
+                id="copy-index-js"
+                title="Copy code"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4 2C3.44772 2 3 2.44772 3 3V13C3 13.5523 3.44772 14 4 14H12C12.5523 14 13 13.5523 13 13V5.41421C13 5.149 12.8946 4.89464 12.7071 4.70711L10.2929 2.29289C10.1054 2.10536 9.851 2 9.58579 2H4Z"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    fill="none"
+                  />
+                  <path
+                    d="M13 5H10C9.44772 5 9 4.55228 9 4V1"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    fill="none"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="code-generator-content">
+            <pre
+              id="generated-code"
+            ><code class="language-javascript"></code></pre>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -2036,6 +2375,215 @@
       // Initialize documentation generator
       const generator = new DocumentationGenerator();
       generator.generate();
+
+      // Index.js Generator Functionality
+      const componentMap = {
+        "icon-svg": "./js-components/icon-svg.js",
+        "h-stack": "./js-components/h-stack.js",
+        "h-stack_responsive": "./js-components/h-stack_responsive.js",
+        "v-stack": "./js-components/v-stack.js",
+        "v-stack_responsive": "./js-components/v-stack_responsive.js",
+      };
+
+      const allComponents = Object.keys(componentMap);
+      let selectedComponents = new Set(allComponents);
+
+      function getImportPath(component) {
+        const pathInput = document.getElementById("import-path-input");
+        const customPath = pathInput.value.trim();
+        const defaultPath = componentMap[component];
+
+        if (!customPath || customPath === "./js-components/") {
+          return defaultPath;
+        }
+
+        // Extract filename from default path
+        const filename = defaultPath.split("/").pop();
+
+        // If custom path ends with the filename, use it as-is
+        if (customPath.endsWith(filename)) {
+          return customPath;
+        }
+
+        // Otherwise, treat as directory path and append filename
+        const basePath = customPath.endsWith("/")
+          ? customPath
+          : customPath + "/";
+        return basePath + filename;
+      }
+
+      function generateIndexJS() {
+        const scriptTag = '<script type="module" src="index.js"></' + "script>";
+        const header =
+          "/**\n" +
+          " * Web Components Index\n" +
+          " *\n" +
+          " * Imports and registers all selected web components.\n" +
+          " *\n" +
+          " * Usage:\n" +
+          " *   " +
+          scriptTag +
+          "\n" +
+          " */\n";
+
+        const imports = Array.from(selectedComponents)
+          .sort()
+          .map((comp) => `import "${getImportPath(comp)}";`)
+          .join("\n");
+
+        return header + (imports ? "\n" + imports : "");
+      }
+
+      function updateCodeDisplay() {
+        const preElement = document.getElementById("generated-code");
+        const codeElement = preElement.querySelector("code");
+        const code = generateIndexJS();
+
+        // Ensure language and hljs classes are set
+        codeElement.className = "language-javascript hljs";
+
+        // Use highlight() to get highlighted HTML, then set innerHTML
+        const highlighted = hljs.highlight(code, { language: "javascript" });
+        codeElement.innerHTML = highlighted.value;
+      }
+
+      function handleComponentClick(component) {
+        const btn = document.querySelector(
+          `.component-btn[data-component="${component}"]`
+        );
+
+        if (component === "all") {
+          const isAllSelected =
+            selectedComponents.size === allComponents.length;
+          if (isAllSelected) {
+            selectedComponents.clear();
+            btn.classList.remove("active");
+            document
+              .querySelectorAll(".component-btn:not([data-component='all'])")
+              .forEach((b) => b.classList.remove("active"));
+          } else {
+            selectedComponents = new Set(allComponents);
+            btn.classList.add("active");
+            document
+              .querySelectorAll(".component-btn:not([data-component='all'])")
+              .forEach((b) => b.classList.add("active"));
+          }
+        } else {
+          if (selectedComponents.has(component)) {
+            selectedComponents.delete(component);
+            btn.classList.remove("active");
+            document
+              .querySelector(".component-btn[data-component='all']")
+              .classList.remove("active");
+          } else {
+            selectedComponents.add(component);
+            btn.classList.add("active");
+
+            // Check if all components are selected
+            if (selectedComponents.size === allComponents.length) {
+              document
+                .querySelector(".component-btn[data-component='all']")
+                .classList.add("active");
+            }
+          }
+        }
+
+        updateCodeDisplay();
+      }
+
+      // Initialize component buttons
+      document.querySelectorAll(".component-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const component = btn.dataset.component;
+          handleComponentClick(component);
+        });
+      });
+
+      // Path input event listener
+      document
+        .getElementById("import-path-input")
+        .addEventListener("input", () => {
+          updateCodeDisplay();
+        });
+
+      // Download button functionality
+      document
+        .getElementById("download-files")
+        .addEventListener("click", async () => {
+          const downloadBtn = document.getElementById("download-files");
+
+          if (selectedComponents.size === 0) {
+            alert("Please select at least one component to download.");
+            return;
+          }
+
+          try {
+            downloadBtn.disabled = true;
+            const zip = new JSZip();
+
+            // Fetch and add all selected component files
+            const fetchPromises = Array.from(selectedComponents).map(
+              async (comp) => {
+                const filePath = componentMap[comp];
+                try {
+                  const response = await fetch(filePath);
+                  const content = await response.text();
+                  // Extract filename from path
+                  const filename = filePath.split("/").pop();
+                  zip.file(filename, content);
+                } catch (error) {
+                  console.error(`Failed to fetch ${filePath}:`, error);
+                  throw new Error(`Failed to fetch ${filePath}`);
+                }
+              }
+            );
+
+            await Promise.all(fetchPromises);
+
+            // Add index.js file
+            const indexCode = generateIndexJS();
+            zip.file("index.js", indexCode);
+
+            // Generate zip file
+            const blob = await zip.generateAsync({ type: "blob" });
+
+            // Create download link
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "bloxbox-components.zip";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          } catch (err) {
+            console.error("Failed to download files:", err);
+            alert("Failed to download files. Please try again.");
+          } finally {
+            downloadBtn.disabled = false;
+          }
+        });
+
+      // Copy button functionality
+      document
+        .getElementById("copy-index-js")
+        .addEventListener("click", async () => {
+          const code = generateIndexJS();
+          const btn = document.getElementById("copy-index-js");
+
+          try {
+            await navigator.clipboard.writeText(code);
+            btn.classList.add("copied");
+            setTimeout(() => {
+              btn.classList.remove("copied");
+            }, 2000);
+          } catch (err) {
+            console.error("Failed to copy:", err);
+          }
+        });
+
+      // Initialize code display
+      updateCodeDisplay();
 
       // Top bar toggle functionality (mobile)
       const topBarToggle = document.getElementById("top-bar-toggle");
